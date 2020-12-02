@@ -1,44 +1,81 @@
 package com.skteam.blogapp.ui.home.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.DataBindingUtil;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.skteam.blogapp.R;
+import com.skteam.blogapp.databinding.BlogItemBinding;
 import com.skteam.blogapp.restmodels.getBlogs.ResItem;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
-public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder> {
+import static com.skteam.blogapp.setting.AppConstance.IMG_URL;
+
+public class BlogAdapter extends PagedListAdapter<ResItem, BlogAdapter.BlogViewHolder> {
     private Context context;
     private List<ResItem> blogLists;
 
-    public BlogAdapter(Context context, List<ResItem> blogsList) {
-        this.context = context;
-        blogLists=blogsList;
+    public BlogAdapter(Context context) {
+        super(DIFF_CALLBACK);
+        this.context=context;
+
     }
 
     @NonNull
     @Override
     public BlogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        BlogItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.blog_item, parent, false);
+        return new BlogViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BlogViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BlogViewHolder holder, final int position) {
+        holder.OnBindView(getItem(position),position);
 
     }
 
-    @Override
-    public int getItemCount() {
-        return blogLists.size();
-    }
 
-    class BlogViewHolder extends RecyclerView.ViewHolder {
-        public BlogViewHolder(@NonNull View itemView) {
-            super(itemView);
+    public class BlogViewHolder extends RecyclerView.ViewHolder {
+        private BlogItemBinding binding;
+
+        public BlogViewHolder(BlogItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public void OnBindView(ResItem item, int position) {
+            binding.blogDate.setText(item.getCreatedAt());
+            Glide.with(context).load(IMG_URL+item.getImage()).into(binding.imgBlog);
+            binding.blogTitle.setText(item.getTitle());
+            binding.blogDiscription.setText(item.getDescription());
         }
     }
+
+    private static DiffUtil.ItemCallback<ResItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<ResItem>() {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull ResItem oldItem, @NonNull ResItem newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull ResItem oldItem, @NonNull ResItem newItem) {
+            return true;
+        }
+    };
 }

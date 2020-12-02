@@ -1,5 +1,7 @@
 package com.skteam.blogapp.ui.home;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
@@ -8,11 +10,16 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.paging.PagedList;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseFragment;
 import com.skteam.blogapp.databinding.HomeFragmentBinding;
@@ -31,7 +38,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
     private HomeViewModel viewModel;
     private Dialog internetDialog;
     private BlogAdapter blogAdapter;
-    private List<ResItem> blogsList=new ArrayList<>();
+    private PagedList<ResItem> getBlogList;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -72,8 +79,17 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
         super.onActivityCreated(savedInstanceState);
         binding = getViewDataBinding();
         viewModel.setNavigator(this);
-        blogAdapter=new BlogAdapter(getContext(),blogsList);
+        viewModel.LoadPaging(this);
+        blogAdapter=new BlogAdapter(getContext());
         binding.blogsRecycler.setAdapter(blogAdapter);
+        viewModel.getGeBarDtaList().observe(getBaseActivity(), new Observer<PagedList<ResItem>>() {
+            @Override
+            public void onChanged(PagedList<ResItem> resItems) {
+                getBlogList=resItems;
+                blogAdapter.submitList(getBlogList);
+            }
+        });
+
     }
 
     @Override
@@ -86,5 +102,33 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
         } else {
             internetDialog.show();
         }
+    }
+
+    @Override
+    public void isLoading(boolean value) {
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if(value){
+                    showLoadingDialog("");
+                }else {
+                    hideLoadingDialog();
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void getMessage(String message) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                showCustomAlert(message);
+            }
+        });
+
+
     }
 }

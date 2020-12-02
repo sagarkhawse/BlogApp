@@ -19,7 +19,7 @@ public class AppConstance {
 
     //API Endpoints
     public static final String API_BASE_URL ="http://androappdev.xyz/BlogApp/index.php?p=";
-    public static final String IMG_URL ="";
+    public static final String IMG_URL ="https://androappdev.xyz/BlogApp/";
     public static final String SIGN_UP ="sign_up";
     public static final String BLOGS ="blogs";
 
