@@ -22,6 +22,7 @@ public class SharedPre {
     private static final String APP_BACKGROUND = "app_in_background";
     private static final String IS_ADD_MOB_SAVED = "isSvedAddMobData";
     private static final String IS_LOGGED_IN = "login";
+    private static final String REMIND_ME_LATER = "remindMeLater";
     private static final String IS_REGISTER = "register";
     private static final String USER_ID = "userId";
     private static final String FIREBASE_TOKEN = "firebaseToken";
@@ -67,6 +68,13 @@ public class SharedPre {
 
     public void setIsLoggedIn(boolean value) {
         SetDataBoolean(this.IS_LOGGED_IN, value);
+    }
+    public boolean isRemindMeLater() {
+        return GetDataBoolean(this.REMIND_ME_LATER);
+    }
+
+    public void setRemindMeLater(boolean value) {
+        SetDataBoolean(this.REMIND_ME_LATER, value);
     }
 
     public boolean isGoogleLoggedIn() {

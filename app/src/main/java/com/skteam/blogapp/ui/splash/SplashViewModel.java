@@ -7,18 +7,15 @@
  *
  */
 
-package com.skteam.blogapp.ui.welcome;
-
+package com.skteam.blogapp.ui.splash;
 import android.app.Activity;
 import android.content.Context;
-
 import com.skteam.blogapp.baseclasses.BaseViewModel;
 import com.skteam.blogapp.prefrences.SharedPre;
 
-
-public class WelcomeViewModel extends BaseViewModel<WelcomeNav> {
-
-    public WelcomeViewModel(Context context, SharedPre sharedPre, Activity activity) {
+public class SplashViewModel extends BaseViewModel<SplashNav> {
+    public SplashViewModel(Context context, SharedPre sharedPre, Activity activity) {
         super(context, sharedPre, activity);
     }
+
 }

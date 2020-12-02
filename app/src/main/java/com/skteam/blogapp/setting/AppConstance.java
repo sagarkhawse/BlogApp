@@ -18,8 +18,9 @@ public class AppConstance {
     public static final int MINUTES60=3601000;
 
     //API Endpoints
-    public static final String API_BASE_URL ="";
+    public static final String API_BASE_URL ="http://androappdev.xyz/BlogApp/index.php?p=";
     public static final String IMG_URL ="";
     public static final String SIGN_UP ="sign_up";
+    public static final String BLOGS ="blogs";
 
 }

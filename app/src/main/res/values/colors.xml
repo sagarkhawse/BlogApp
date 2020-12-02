@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3A57FB</color>
-    <color name="colorPrimaryDark">#3A57FB</color>
+    <color name="colorPrimary">#F6A02E</color>
+    <color name="colorPrimaryDark">#FF9100</color>
 
     <color name="colorHomeBg">#EAEBF3</color>
 
@@ -16,10 +16,10 @@
     <color name="hintLine">#444f5e </color>
     <color name="pink">#FF1494</color>
     <color name="black">#000000</color>
-    <color name="lightGray">#3F485C</color>
+    <color name="lightGray">#C1C4CC</color>
     <color name="commentColor">#717D9C</color>
-    <color name="text_shadow">#7F000000</color>
-    <color name="white_light">#e7e7ef</color>
+    <color name="gray_semi_dark">#7F605454</color>
+    <color name="gray_dark">#626267</color>
     <color name="profile_line">#10161e</color>
     <color name="color_white">#ffffff</color>
     <color name="color_gray_back">#EDEEF0</color>

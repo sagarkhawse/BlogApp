@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ITI TEST</string>
+    <string name="app_name">Blog App</string>
     <string name="messageofinternetService">No internet connection found.Please\ncheck your connection \n or try again</string>
     <string name="turn_on_internet_service">Turn On</string>
     <string name="login_id">Login ID</string>
@@ -62,10 +62,10 @@
 
 
     <!--    Login   -->
-    <string name="facebook_app_id">835351513672710</string>
-    <string name="fb_protocol">fb835351513672710</string>
+    <string name="facebook_app_id">748893089056086</string>
+    <string name="fb_protocol">fb748893089056086</string>
     <string name="ACCOUNT_KIT_CLIENT_TOKEN">3aa80d669d9a65edd236b213e060b05d</string>
-    <string name="GOOGLE_SIGNIN_SECRET">1071205870408-gcph6eqvje8he7uloq51u8jlkut8t47t.apps.googleusercontent.com</string>
+    <string name="GOOGLE_SIGNIN_SECRET">968931466478-9g2buvqp67iv7kau7orfh1982a6d3nep.apps.googleusercontent.com</string>
 
 
     <!--    Home Screen   -->
@@ -104,5 +104,7 @@
     <string name="cancel">Cancel</string>
     <string name="dialog_ok">Ok</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="welcome_to_blog_app">welcome to Blog app</string>
+    <string name="remind_me_later">Remind Me Later</string>
 
 </resources>

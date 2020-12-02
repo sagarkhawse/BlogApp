@@ -36,6 +36,7 @@ import com.skteam.blogapp.database.RoomDatabase;
 import com.skteam.blogapp.databinding.CustomToastBinding;
 import com.skteam.blogapp.prefrences.SharedPre;
 import com.skteam.blogapp.setting.CommonUtils;
+import com.skteam.blogapp.ui.home.HomeFragment;
 import com.skteam.blogapp.ui.welcome.WelcomeFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import java.util.ArrayList;
@@ -280,7 +281,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
                 addToBackStack = false;
                 finish();
             }
-            /*if (fragment instanceof HomeFragment) {
+            if (fragment instanceof HomeFragment) {
                 if (doubleBackToExitPressedOnce) {
                     toast.cancel();
                     finish();
@@ -294,7 +295,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
                 if (manager != null && manager.getBackStackEntryCount() > 0) {
                     manager.popBackStackImmediate();
                 }
-            }*/
+            }
         } else {
             super.onBackPressed();
         }
