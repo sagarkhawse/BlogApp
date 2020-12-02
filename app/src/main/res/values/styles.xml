@@ -1,0 +1,153 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">false</item>
+<!--        <item name="android:listDivider">@drawable/vertical_divider</item>-->
+
+    </style>
+    <style name="DialogAnimation">
+    <item name="android:windowEnterAnimation">@android:anim/slide_in_left</item>
+    <item name="android:windowExitAnimation">@android:anim/slide_out_right</item>
+    </style>
+
+
+
+    <style name="textViewBigWhite">
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:padding">@dimen/_5sdp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/_22ssp</item>
+    </style>
+
+
+    <style name="textViewDescriptionBlack">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:padding">@dimen/_5sdp</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+    </style>
+
+
+    <style name="textViewDescriptionWhite">
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:padding">@dimen/_5sdp</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+    </style>
+
+    <style name="editText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/_15ssp</item>
+        <item name="android:textColorHint">@color/colorAccent</item>
+        <item name="android:imeOptions">flagNoExtractUi|actionNext</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="underlineTextview" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+        <item name="android:imeOptions">flagNoExtractUi|actionNext</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="DialogTheme_transparent" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--You can set other style items also, such as animations and etc-->
+    </style>
+
+    <style name="dialog_animation_from_center">
+        <item name="android:windowEnterAnimation">@anim/grow_out</item>
+        <item name="android:windowExitAnimation">@anim/grow_in</item>
+    </style>
+
+<!--    <style name="seekBarghostmodetym">-->
+<!--        <item name="android:minHeight">@dimen/_4sdp</item>-->
+<!--        <item name="android:maxHeight">@dimen/_4sdp</item>-->
+<!--        <item name="android:progressDrawable">@drawable/progress_seekbar</item>-->
+<!--        <item name="android:layout_weight">1</item>-->
+<!--    </style>-->
+    <style name="DialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+
+
+
+
+
+    <!--Alert Dialogs-->
+
+    <style name="alert_dialog" parent="android:Theme.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowBackground">@color/float_transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.4</item>
+    </style>
+    <style name="parent">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="parentFull">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="viewParent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="parent.TextLayout">
+        <item name="android:layout_marginLeft">@dimen/_15sdp</item>
+    </style>
+
+    <style name="modifiedEditText" parent="parent">
+        <item name="android:textSize">@dimen/newsMoreTextSize</item>
+    </style>
+    <style name="btnBlueBig">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginRight">@dimen/_25sdp</item>
+    <item name="android:layout_marginLeft">@dimen/_25sdp</item>
+    <item name="android:background">@drawable/btn_gradient_background</item>
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:gravity">center</item>
+    <item name="android:fontFamily">@font/poppins_bold</item>
+    <item name="android:padding">@dimen/_15sdp</item>
+    <item name="android:textSize">@dimen/_12ssp</item>
+    <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>

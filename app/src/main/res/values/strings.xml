@@ -1,3 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BlogApp</string>
+    <string name="app_name">ITI TEST</string>
+    <string name="messageofinternetService">No internet connection found.Please\ncheck your connection \n or try again</string>
+    <string name="turn_on_internet_service">Turn On</string>
+    <string name="login_id">Login ID</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="create_account">Create Account</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="gender">Gender</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="prev">Prev</string>
+    <string name="next">Next</string>
+    <string name="login_instead">Login Instead</string>
+    <string name="email_address">Email Address</string>
+    <string name="password_reset_link_will_be_sent_to_your_registered_email_address">Password reset link will be sent to your registered email address</string>
+    <string name="send_reset_link">Send Reset Link</string>
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="set_new_password">Set New Password</string>
+    <string name="new_password">New Password</string>
+    <string name="submit">Submit</string>
+    <string name="change_password">Change Password</string>
+    <string name="change_mob">Change Mobile Number</string>
+    <string name="current_password">Current Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="change">Change</string>
+    <string name="select_gender">Select Gender</string>
+    <string name="otp">OTP</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome">Welcome</string>
+    <string name="Username">Username</string>
+    <string name="caption">We teach You at any point of the Earth</string>
+
+
+    <!--    Sign Up    -->
+    <string name="sign_up">Sign up</string>
+    <string name="log_in">Log in</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="or">or</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="back">back</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="logout">Logout</string>
+    <string name="email_or_Pass_incorrect">Email or Password is Incorrect</string>
+    <string name="Logged_in">Log in Successfully</string>
+    <string name="email_empty">Email can\'t be empty.</string>
+    <string name="valid_email">Please enter a valid email.</string>
+    <string name="password_empty">Password can\'t be empty.</string>
+
+
+    <!--    Login   -->
+    <string name="facebook_app_id">835351513672710</string>
+    <string name="fb_protocol">fb835351513672710</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">3aa80d669d9a65edd236b213e060b05d</string>
+    <string name="GOOGLE_SIGNIN_SECRET">1071205870408-gcph6eqvje8he7uloq51u8jlkut8t47t.apps.googleusercontent.com</string>
+
+
+    <!--    Home Screen   -->
+    <string name="hello">Hello!</string>
+    <string name="user_name">Student Name</string>
+    <string name="teachers">Teachers</string>
+    <string name="chapters">Chapters</string>
+    <string name="my_score">My Score</string>
+    <string name="_00_00">00.00</string>
+    <string name="best_players">BEST PLAYERS</string>
+    <string name="view_all"><u>View All</u></string>
+    <string name="subjects">Subjects</string>
+    <string name="select_chapter">select chapter</string>
+    <string name="test_series_1">Test series 1</string>
+    <string name="view_test">View Test</string>
+    <string name="mathematics">Mathematics</string>
+    <string name="_20_chapters">20 Chapters</string>
+
+
+    <!--    Sidebar   -->
+    <string name="profile">Profile</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="invite">Invite</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="contact_us">Contact us</string>
+    <string name="about_us">About us</string>
+    <string name="share">Share this app</string>
+
+
+    <!--    LeaderBoard   -->
+    <string name="today">Today</string>
+    <string name="month">Month</string>
+    <string name="all_time">All time</string>
+    <string name="time">Time</string>
+    <string name="no_chapter_found">No Chapter Found</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_ok">Ok</string>
+    <string name="edit_profile">Edit Profile</string>
+
 </resources>

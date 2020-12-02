@@ -23,4 +23,14 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+ext {
+    roomVersion = '2.2.1'
+    archLifecycleVersion = '2.2.0'
+    coreTestingVersion = '2.1.0'
+    materialVersion = '1.0.0'
+    facebookVersion = '[5,6)'
+    circleImageVersion = '3.1.0'
+    retrofitVersion = '2.7.1'
+    okHttpVersion = '3.14.4'
+}
 
