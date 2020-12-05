@@ -2,9 +2,11 @@ package com.skteam.blogapp.ui.home;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -14,6 +16,8 @@ import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseActivity;
 import com.skteam.blogapp.databinding.ActivityHomeBinding;
 import com.skteam.blogapp.databinding.BottomSheetBinding;
+import com.skteam.blogapp.databinding.NavHeaderMainBinding;
+import com.skteam.blogapp.databinding.ToolbarBinding;
 import com.skteam.blogapp.setting.CommonUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -28,7 +32,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
     private Disposable disposable;
     private LinearLayout bottomSheet;
     private BottomSheetBehavior sheetBehavior;
-
+    private NavHeaderMainBinding navigationViewHeaderBinding;
     @Override
     public int getBindingVariable() {
         return 1;
@@ -47,17 +51,27 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
         return binding.bottomSheetId;
     }
 
+    public ToolbarBinding getToolbar(){
+        return binding.toolbar;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = getViewDataBinding();
         binding.toolbar.title.setText("Blogs");
+        navigationViewHeaderBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.nav_header_main, binding.navView, false);
+        binding.navView.addHeaderView(navigationViewHeaderBinding.getRoot());
         sheetBehavior = BottomSheetBehavior.from(binding.bottomSheetId.bottomLay);
         BottomSheetCheck();
 
         disposable = RxView.clicks(binding.toolbar.back).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
             getVibe().vibrate(100);
-            onBackPressed();
+            if (binding.drawer.isDrawerOpen(Gravity.LEFT)) {
+                binding.drawer.closeDrawer(Gravity.LEFT);
+            } else {
+                binding.drawer.openDrawer(Gravity.LEFT);
+            }
         });
         disposable = RxView.clicks(binding.toolbar.menu).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
             getVibe().vibrate(100);
@@ -75,6 +89,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
                 switch (newState) {
                     case BottomSheetBehavior.STATE_HIDDEN:
                         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                        binding.bottomSheetId.bottomLay.setVisibility(View.GONE);
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED: {
                         sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -83,13 +98,14 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
                     case BottomSheetBehavior.STATE_COLLAPSED: {
                         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
+
                     }
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:
 
                         break;
                     case BottomSheetBehavior.STATE_SETTLING:
-
+                        binding.bottomSheetId.bottomLay.setVisibility(View.GONE);
                         break;
                     default:
                 }

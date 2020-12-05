@@ -68,6 +68,14 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
         super.onActivityCreated(savedInstanceState);
         binding = getViewDataBinding();
         mViewModel.setNavigator(this);
+        ((HomeActivity)getContext()).getToolbar().back.setImageResource(R.drawable.ic_left_arrow);
+        ((HomeActivity)getContext()).getToolbar().title.setText("View Blog");
+        ((HomeActivity)getContext()).getToolbar().back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity)getContext()).onBackPressed();
+            }
+        });
         binding.blogTitle.setText(getVlogMain.getTitle());
         Glide.with(getContext()).load(IMG_URL+getVlogMain.getImage()).into(binding.imgBlog);
         binding.blogDiscription.setText(getVlogMain.getDescription());
@@ -96,6 +104,13 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
             }
         });
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((HomeActivity)getContext()).getToolbar().back.setImageResource(R.drawable.ic_drawer);
+        ((HomeActivity)getContext()).getToolbar().title.setText("Blogs");
     }
 
     @Override

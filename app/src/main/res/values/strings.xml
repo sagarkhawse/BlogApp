@@ -106,5 +106,7 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="welcome_to_blog_app">welcome to Blog app</string>
     <string name="remind_me_later">Remind Me Later</string>
+    <string name="privacyolicy">Privacy Policy</string>
+    <string name="blog">Blog</string>
 
 </resources>
