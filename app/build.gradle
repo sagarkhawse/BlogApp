@@ -94,8 +94,6 @@ dependencies {
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.1.0'
     implementation 'com.jakewharton.rxbinding3:rxbinding-core:3.1.0'
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'
-    // facebook
-    implementation "com.facebook.android:facebook-login:$rootProject.facebookVersion"
     //Fast Networking
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
     implementation 'com.amitshekhar.android:rx2-android-networking:1.0.2'

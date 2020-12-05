@@ -13,6 +13,7 @@ import com.jakewharton.rxbinding3.view.RxView;
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseActivity;
 import com.skteam.blogapp.databinding.ActivityHomeBinding;
+import com.skteam.blogapp.databinding.BottomSheetBinding;
 import com.skteam.blogapp.setting.CommonUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -42,6 +43,9 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
     public HomeViewModel getViewModel() {
         return viewModel = new HomeViewModel(this, getSharedPre(), this);
     }
+    public BottomSheetBinding getBottomSheet(){
+        return binding.bottomSheetId;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +54,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
         binding.toolbar.title.setText("Blogs");
         sheetBehavior = BottomSheetBehavior.from(binding.bottomSheetId.bottomLay);
         BottomSheetCheck();
-        if(!getSharedPre().isLoggedIn()){
-           binding.bottomSheetId.bottomLay.setVisibility(View.VISIBLE);
-        }
+
         disposable = RxView.clicks(binding.toolbar.back).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
             getVibe().vibrate(100);
             onBackPressed();

@@ -49,5 +49,5 @@
         android:id="@+id/bottom_sheet_id"
         layout="@layout/bottom_sheet"
         android:background="@color/color_white"
-        android:visibility="visible" />
+        android:visibility="gone" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout></layout>

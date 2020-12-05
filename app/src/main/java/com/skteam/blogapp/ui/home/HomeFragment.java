@@ -1,15 +1,12 @@
 package com.skteam.blogapp.ui.home;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.paging.PagedList;
 
 import android.os.Handler;
@@ -17,18 +14,13 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseFragment;
 import com.skteam.blogapp.databinding.HomeFragmentBinding;
 import com.skteam.blogapp.restmodels.getBlogs.ResItem;
 import com.skteam.blogapp.setting.CommonUtils;
 import com.skteam.blogapp.ui.home.adapter.BlogAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewModel> implements HomeNav {
 

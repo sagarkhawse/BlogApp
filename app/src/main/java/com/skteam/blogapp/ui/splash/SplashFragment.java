@@ -23,8 +23,6 @@ import com.skteam.blogapp.baseclasses.BaseFragment;
 import com.skteam.blogapp.databinding.FragmentSplashBinding;
 import com.skteam.blogapp.setting.CommonUtils;
 import com.skteam.blogapp.ui.home.HomeActivity;
-import com.skteam.blogapp.ui.welcome.WelcomeFragment;
-
 import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -112,16 +110,10 @@ public class SplashFragment extends BaseFragment<FragmentSplashBinding, SplashVi
     }
     void StartIntent(){
 
-        if(getSharedPre().isLoggedIn()){
+
            startActivity(new Intent(getBaseActivity(), HomeActivity.class));
            getBaseActivity().finish();
-        }else if (getSharedPre().isRemindMeLater()){
-            startActivity(new Intent(getBaseActivity(), HomeActivity.class));
-            getBaseActivity().finish();
-        }
-        else{
-            getBaseActivity().startFragment(WelcomeFragment.newInstance(),true,WelcomeFragment.newInstance().toString());
-        }
+
 
     }
 

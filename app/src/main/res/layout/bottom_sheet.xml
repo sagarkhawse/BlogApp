@@ -6,39 +6,44 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/bottomLay"
-    android:visibility="gone"
+    android:visibility="visible"
     android:orientation="vertical"
     app:behavior_hideable="true"
     android:gravity="center"
     app:behavior_peekHeight="60dp"
     app:layout_behavior="@string/bottom_sheet_behavior">
-
-<LinearLayout
+<androidx.cardview.widget.CardView
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_100sdp"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="@dimen/_10sdp"
+    android:layout_margin="@dimen/_10sdp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_110sdp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp"
+            android:gravity="center"
+            android:paddingLeft="@dimen/_5sdp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="Login Now"
+            android:id="@+id/blogTitle"/>
+        <include layout="@layout/layout_fb_google"
+            android:id="@+id/loginViaGoogle"/>
+        <TextView
+            android:id="@+id/remindMeLater"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/gray_semi_dark"
+            android:text="Remind me later"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
 
-    android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_15ssp"
-        android:gravity="center|left"
-        android:paddingLeft="@dimen/_5sdp"
-        android:textStyle="bold"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:text="Hello User You Not Log in Yet Please Login First"
-        android:id="@+id/blogTitle"/>
-    <Button
-        android:id="@+id/createBtn"
-        style="@style/btnPrimary"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:text="@string/login" />
-</LinearLayout>
 </LinearLayout>
 </layout>

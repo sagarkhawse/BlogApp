@@ -90,17 +90,7 @@
                 android:layout_marginEnd="@dimen/_15sdp"
                 android:text="@string/log_in" />
 
-            <include layout="@layout/or_layout" />
 
-            <Button
-                android:id="@+id/createBtn"
-                style="@style/btnOutlineGray"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
-                android:text="@string/sign_up"
-                android:textColor="@color/black" />
 
 
             <include

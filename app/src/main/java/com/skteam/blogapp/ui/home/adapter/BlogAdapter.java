@@ -20,6 +20,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.databinding.BlogItemBinding;
 import com.skteam.blogapp.restmodels.getBlogs.ResItem;
+import com.skteam.blogapp.ui.home.HomeActivity;
+import com.skteam.blogapp.ui.viewblog.ViewBlogFragment;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -58,11 +60,17 @@ public class BlogAdapter extends PagedListAdapter<ResItem, BlogAdapter.BlogViewH
             this.binding = binding;
         }
 
-        public void OnBindView(ResItem item, int position) {
+        public void OnBindView(final ResItem item, int position) {
             binding.blogDate.setText(item.getCreatedAt());
             Glide.with(context).load(IMG_URL+item.getImage()).into(binding.imgBlog);
             binding.blogTitle.setText(item.getTitle());
             binding.blogDiscription.setText(item.getDescription());
+            binding.imgBlog.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((HomeActivity) context).startFragment(ViewBlogFragment.newInstance(item),true,ViewBlogFragment.newInstance(item).toString());
+                }
+            });
         }
     }
 

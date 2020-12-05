@@ -24,7 +24,6 @@ import com.skteam.blogapp.baseclasses.BaseFragment;
 import com.skteam.blogapp.databinding.FragmentLoginBinding;
 import com.skteam.blogapp.setting.CommonUtils;
 import com.skteam.blogapp.ui.home.HomeActivity;
-import com.skteam.blogapp.ui.signup.SignUpFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -89,8 +88,6 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding, LoginViewM
         super.onViewCreated(view, savedInstanceState);
         viewModel.setNavigator(this);
         binding = getViewDataBinding();
-        binding.otherSigninOption.fbLoginButton.setFragment(this);
-        binding.otherSigninOption.fbLoginButton.setPermissions(permissions);
         toolbar();
         SetClickListeners();
 
@@ -113,19 +110,12 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding, LoginViewM
             getVib().vibrate(100);
             LoginNow();
         });
-        disposable = RxView.clicks(binding.createBtn).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
-            getVib().vibrate(100);
-            getBaseActivity().startFragment(SignUpFragment.newInstance(), true, SignUpFragment.newInstance().toString());
-        });
+
         disposable = RxView.clicks(binding.otherSigninOption.googleBtn).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
             getVib().vibrate(100);
             CallGoogleApi();
         });
-        disposable = RxView.clicks(binding.otherSigninOption.faceBookBtn).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
-            getVib().vibrate(100);
-            viewModel.registerFBCallBack();
-            binding.otherSigninOption.fbLoginButton.performClick();
-        });
+
         disposable=RxView.clicks(binding.tvForgetPass).throttleFirst(1000,TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) throws Exception {
@@ -173,10 +163,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding, LoginViewM
                 viewModel.SignUpViaGoogle(data);
                 break;
             }
-            default:{
-                viewModel.getCallbackManager().onActivityResult(requestCode, resultCode, data);
-                break;
-            }
+
         }
     }
 
