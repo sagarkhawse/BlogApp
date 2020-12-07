@@ -34,7 +34,7 @@ public class BlogAdapter extends PagedListAdapter<ResItem, BlogAdapter.BlogViewH
 
     public BlogAdapter(Context context) {
         super(DIFF_CALLBACK);
-        this.context=context;
+        this.context = context;
 
     }
 
@@ -47,7 +47,7 @@ public class BlogAdapter extends PagedListAdapter<ResItem, BlogAdapter.BlogViewH
 
     @Override
     public void onBindViewHolder(@NonNull BlogViewHolder holder, final int position) {
-        holder.OnBindView(getItem(position),position);
+        holder.OnBindView(getItem(position), position);
 
     }
 
@@ -62,14 +62,25 @@ public class BlogAdapter extends PagedListAdapter<ResItem, BlogAdapter.BlogViewH
 
         public void OnBindView(final ResItem item, int position) {
             binding.blogDate.setText(item.getCreatedAt());
-            Glide.with(context).load(IMG_URL+item.getImage()).into(binding.imgBlog);
+            Glide.with(context).load(IMG_URL + item.getImage()).into(binding.imgBlog);
             binding.blogTitle.setText(item.getTitle());
             binding.blogDiscription.setText(item.getDescription());
-            binding.imgBlog.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((HomeActivity) context).startFragment(ViewBlogFragment.newInstance(item),true,ViewBlogFragment.newInstance(item).toString());
+            binding.imgBlog.setOnClickListener(v -> ((HomeActivity) context).startFragment(ViewBlogFragment.newInstance(item), true, ViewBlogFragment.newInstance(item).toString()));
+            binding.like.setOnClickListener(v -> {
+                if (!((HomeActivity) context).getSharedPre().isLoggedIn()) {
+                    ((HomeActivity) context).getBottomSheet().bottomLay.setVisibility(View.VISIBLE);
+                } else {
+
                 }
+
+            });
+            binding.comment.setOnClickListener(v -> {
+                if (!((HomeActivity) context).getSharedPre().isLoggedIn()) {
+                    ((HomeActivity) context).getBottomSheet().bottomLay.setVisibility(View.VISIBLE);
+                } else {
+
+                }
+
             });
         }
     }
