@@ -5,6 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_55sdp"
         android:gravity="center|left"
+        android:id="@+id/toolbarLay"
         android:background="@color/colorPrimaryDark"
         android:orientation="horizontal">
 

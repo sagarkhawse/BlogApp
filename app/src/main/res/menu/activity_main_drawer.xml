@@ -8,6 +8,9 @@
         <item
             android:id="@+id/status_nav"
             android:title="@string/blog" />
+        <item
+            android:id="@+id/profile"
+            android:title="@string/edit_profile" />
 
 
         <item
