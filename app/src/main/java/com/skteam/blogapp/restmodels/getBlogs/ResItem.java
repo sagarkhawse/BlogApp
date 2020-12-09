@@ -3,8 +3,9 @@ package com.skteam.blogapp.restmodels.getBlogs;
 import com.google.gson.annotations.SerializedName;
 
 public class ResItem{
-
-	@SerializedName("image")
+	@SerializedName("liked")
+    public String getLikeAction;
+    @SerializedName("image")
 	private String image;
 
 	@SerializedName("description")
@@ -18,6 +19,14 @@ public class ResItem{
 
 	@SerializedName("title")
 	private String title;
+
+	public String getGetLikeAction() {
+		return getLikeAction;
+	}
+
+	public void setGetLikeAction(String getLikeAction) {
+		this.getLikeAction = getLikeAction;
+	}
 
 	public void setImage(String image){
 		this.image = image;

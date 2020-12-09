@@ -74,25 +74,20 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
         viewModel.LoadPaging(this);
         blogAdapter=new BlogAdapter(getContext());
         binding.blogsRecycler.setAdapter(blogAdapter);
-        viewModel.getGeBarDtaList().observe(getBaseActivity(), new Observer<PagedList<ResItem>>() {
-            @Override
-            public void onChanged(PagedList<ResItem> resItems) {
-                getBlogList=resItems;
-                blogAdapter.submitList(getBlogList);
-            }
+        viewModel.getAllLoginInformation();
+        viewModel.getGeBarDtaList().observe(getBaseActivity(), resItems -> {
+            getBlogList=resItems;
+            blogAdapter.submitList(getBlogList);
         });
 
     }
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-        if (internetDialog == null) {
-            internetDialog = CommonUtils.InternetConnectionAlert(getBaseActivity(), false);
-        }
         if (isConnected) {
-            internetDialog.dismiss();
+            getBaseActivity(). getInternetDialog().dismiss();
         } else {
-            internetDialog.show();
+            getBaseActivity().getInternetDialog().show();
         }
     }
 
@@ -122,5 +117,10 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
         });
 
 
+    }
+
+    @Override
+    public void StartHomeNow() {
+        viewModel.LoadPaging(this);
     }
 }

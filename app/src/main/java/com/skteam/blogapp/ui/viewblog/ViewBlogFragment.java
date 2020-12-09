@@ -20,17 +20,19 @@ import com.skteam.blogapp.baseclasses.BaseFragment;
 import com.skteam.blogapp.databinding.ViewBlogFragmentBinding;
 import com.skteam.blogapp.restmodels.getBlogs.ResItem;
 import com.skteam.blogapp.setting.CommonUtils;
+import com.skteam.blogapp.ui.comment.CommentFragment;
 import com.skteam.blogapp.ui.home.HomeActivity;
 
 import static com.skteam.blogapp.setting.AppConstance.IMG_URL;
 
 public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, ViewBlogViewModel> implements ViewBlogNav {
 
-    private ViewBlogViewModel mViewModel;
+    private ViewBlogViewModel viewmodel;
     private ViewBlogFragmentBinding binding;
     private static ViewBlogFragment instance;
     private static ResItem getVlogMain;
-    private Dialog internetDialog;
+    private int action=0;
+    private boolean isClickedLike=false;
 
 
     public static ViewBlogFragment newInstance(ResItem getVlog) {
@@ -55,7 +57,7 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
 
     @Override
     public ViewBlogViewModel getViewModel() {
-        return mViewModel = new ViewBlogViewModel(getContext(), getSharedPre(), getActivity());
+        return viewmodel = new ViewBlogViewModel(getContext(), getSharedPre(), getActivity());
     }
 
     @Override
@@ -68,40 +70,107 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding = getViewDataBinding();
-        mViewModel.setNavigator(this);
+        viewmodel.setNavigator(this);
         ((HomeActivity)getContext()).getToolbar().toolbarLay.setVisibility(View.GONE);
-
-        binding.ivBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((HomeActivity)getContext()).onBackPressed();
-            }
-        });
         binding.tvTitle.setText(getVlogMain.getTitle().trim());
         Glide.with(getContext()).load(IMG_URL+getVlogMain.getImage()).into(binding.ivBlog);
         binding.tvDesc.setText(getVlogMain.getDescription().trim());
+        if(getVlogMain.getLikeAction.equalsIgnoreCase("0")){
+            binding.ivLike.setImageResource(R.drawable.ic_like);
+            binding.ivLikeTop.setImageResource(R.drawable.ic_like);
+        }else{
+            binding.ivLike.setImageResource(R.drawable.ic_liked);
+            binding.ivLikeTop.setImageResource(R.drawable.ic_liked);
+
+        }
+       setClickListeners();
+
+    }
+
+    private void setClickListeners() {
+        binding.ivBack.setOnClickListener(v -> {
+            getVib().vibrate(100);
+            ((HomeActivity)getContext()).onBackPressed();
+        });
         binding.ivLike.setOnClickListener(v -> {
+            getVib().vibrate(100);
             if(getSharedPre().isLoggedIn()){
-                showCustomAlert("Blog Liked");
+                if(getVlogMain.getLikeAction.equalsIgnoreCase("0")){
+                    //like
+                    viewmodel.LikeTheBlog(getVlogMain.getId(),"1");
+                    isClickedLike=true;
+                    getVlogMain.setGetLikeAction("1");
+                    action=1;
+                    binding.ivLike.setImageResource(R.drawable.ic_liked);
+                    binding.ivLikeTop.setImageResource(R.drawable.ic_liked);
+                }else{
+                    //unlike
+                    action=0;
+                    isClickedLike=true;
+                    getVlogMain.setGetLikeAction("0");
+                    binding.ivLike.setImageResource(R.drawable.ic_like);
+                    binding.ivLikeTop.setImageResource(R.drawable.ic_like);
+                    viewmodel.LikeTheBlog(getVlogMain.getId(),"0");
+                }
             }else{
                 //showBoottomSheet
+                isClickedLike=false;
                 ((HomeActivity)getContext()).getBottomSheet().bottomLay.setVisibility(View.VISIBLE);
+            }
+        });
+        binding.ivLikeTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getVib().vibrate(100);
+                if(getSharedPre().isLoggedIn()){
+                    if(getVlogMain.getLikeAction.equalsIgnoreCase("0")){
+                        //like
+                        viewmodel.LikeTheBlog(getVlogMain.getId(),"1");
+                        isClickedLike=true;
+                        getVlogMain.setGetLikeAction("1");
+                        action=1;
+                        binding.ivLike.setImageResource(R.drawable.ic_liked);
+                        binding.ivLikeTop.setImageResource(R.drawable.ic_liked);
+                    }else{
+                        //unlike
+                        action=0;
+                        isClickedLike=true;
+                        getVlogMain.setGetLikeAction("0");
+                        binding.ivLike.setImageResource(R.drawable.ic_like);
+                        binding.ivLikeTop.setImageResource(R.drawable.ic_like);
+                        viewmodel.LikeTheBlog(getVlogMain.getId(),"0");
+                    }
+                }else{
+                    //showBoottomSheet
+                    isClickedLike=false;
+                    ((HomeActivity)getContext()).getBottomSheet().bottomLay.setVisibility(View.VISIBLE);
+                }
             }
         });
 //
         binding.ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getVib().vibrate(100);
                 if(getSharedPre().isLoggedIn()){
-                    showCustomAlert("Create Comment Activity First");
+                    getBaseActivity().startFragment(CommentFragment.getInstance(getVlogMain.getId()),true,CommentFragment.getInstance(getVlogMain.getId()).toString(),true);
                 }else{
                     ((HomeActivity)getContext()).getBottomSheet().bottomLay.setVisibility(View.VISIBLE);
                 }
             }
         });
-
+        binding.ivCommentTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getVib().vibrate(100);
+                if(getSharedPre().isLoggedIn()){
+                    getBaseActivity().startFragment(CommentFragment.getInstance(getVlogMain.getId()),true,CommentFragment.getInstance(getVlogMain.getId()).toString(),true);
+                }else{
+                    ((HomeActivity)getContext()).getBottomSheet().bottomLay.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
-
 
 
     @Override
@@ -112,13 +181,25 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-        if (internetDialog == null) {
-            internetDialog = CommonUtils.InternetConnectionAlert(getActivity(), false);
-        }
         if (isConnected) {
-            internetDialog.dismiss();
+            getBaseActivity(). getInternetDialog().dismiss();
         } else {
-            internetDialog.show();
+            getBaseActivity().getInternetDialog().show();
         }
+    }
+
+    @Override
+    public void getMessage(String server_not_responding_) {
+        showCustomAlert(server_not_responding_);
+        if(isClickedLike&&action==0){
+            binding.ivLike.setImageResource(R.drawable.ic_liked);
+            binding.ivLikeTop.setImageResource(R.drawable.ic_liked);
+            getVlogMain.setGetLikeAction("1");
+        }else if(isClickedLike && action==1){
+            binding.ivLike.setImageResource(R.drawable.ic_like);
+            binding.ivLikeTop.setImageResource(R.drawable.ic_like);
+            getVlogMain.setGetLikeAction("0");
+        }
+
     }
 }

@@ -53,6 +53,8 @@ public class SplashActivity extends BaseActivity<SplashActivityBinding, SplashVi
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.container);
         printHashKey();
+        getSharedPre().setUserId("007");
+        getSharedPre().setIsLoggedIn(true);
         if (fragment == null) {
             //start splash fragment only first time
             startFragment(SplashFragment.newInstance());

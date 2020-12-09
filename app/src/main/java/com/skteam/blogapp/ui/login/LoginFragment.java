@@ -188,13 +188,10 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding, LoginViewM
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-        if (internetDialog == null) {
-            internetDialog = CommonUtils.InternetConnectionAlert(getBaseActivity(), false);
-        }
         if (isConnected) {
-            internetDialog.dismiss();
+            getBaseActivity(). getInternetDialog().dismiss();
         } else {
-            internetDialog.show();
+            getBaseActivity().getInternetDialog().show();
         }
     }
 }

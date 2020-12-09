@@ -20,7 +20,13 @@ public class AppConstance {
     //API Endpoints
     public static final String API_BASE_URL ="http://androappdev.xyz/BlogApp/index.php?p=";
     public static final String IMG_URL ="https://androappdev.xyz/BlogApp/";
-    public static final String SIGN_UP ="sign_up";
     public static final String BLOGS ="blogs";
+    public static final String SIGN_UP ="sign_up";
+    public static final String LIKE_BLOG ="like_unlike";
+    public static final String LIKE_COMMENT ="like_unlike_comment";
+    public static final String VIEW_ALL_COMMENT ="show_all_comments";
+    public static final String COMMENT_NOW ="comment";
+    public static final String REPLY_TO_COMMENT ="reply_to_comment";
+    public static final String VIEW_REPLY ="show_all_comment_replies";
 
 }

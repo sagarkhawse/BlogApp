@@ -1,10 +1,12 @@
 package com.skteam.blogapp.ui.home;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -25,10 +27,11 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
+import static com.skteam.blogapp.setting.AppConstance.GOOGLE_REQUEST_CODE;
+
 public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewModel> implements HomeNav {
     private ActivityHomeBinding binding;
     private HomeViewModel viewModel;
-    private Dialog internetDialog;
     private Disposable disposable;
     private LinearLayout bottomSheet;
     private BottomSheetBehavior sheetBehavior;
@@ -73,10 +76,14 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
                 binding.drawer.openDrawer(Gravity.LEFT);
             }
         });
-//        disposable = RxView.clicks(binding.toolbar.menu).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
-//            getVibe().vibrate(100);
-//            showCustomAlert("Menu Click");
-//        });
+        disposable = RxView.clicks(binding.bottomSheetId.ivClose).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
+            getVibe().vibrate(100);
+            getBottomSheet().bottomLay.setVisibility(View.GONE);
+        });
+        disposable = RxView.clicks(binding.bottomSheetId.loginViaGoogle.googleBtn).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
+            getVibe().vibrate(100);
+            CallGoogleApi();
+        });
         if (savedInstanceState == null) {
             startFragment(HomeFragment.getInstance(), true, HomeFragment.getInstance().toString());
         }
@@ -119,18 +126,21 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-        if (internetDialog == null) {
-            internetDialog = CommonUtils.InternetConnectionAlert(this, false);
-        }
+
         if (isConnected) {
-            internetDialog.dismiss();
+            getInternetDialog().dismiss();
         } else {
-            internetDialog.show();
+            getInternetDialog().show();
         }
     }
 
     @Override
     public void isLoading(boolean value) {
+        if(value){
+          showLoadingDialog("");
+        }else{
+         hideLoadingDialog();
+        }
 
     }
 
@@ -138,4 +148,29 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
     public void getMessage(String message) {
 
     }
+
+    @Override
+    public void StartHomeNow() {
+
+    }
+
+
+    private void CallGoogleApi() {
+        showLoadingDialog("");
+        Intent signInIntent = viewModel.getGoogleClient().getSignInIntent();
+        startActivityForResult(signInIntent, GOOGLE_REQUEST_CODE);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case GOOGLE_REQUEST_CODE: {
+                hideLoadingDialog();
+                viewModel.SignUpViaGoogle(data);
+                break;
+            }
+
+        }
+    }
+
 }

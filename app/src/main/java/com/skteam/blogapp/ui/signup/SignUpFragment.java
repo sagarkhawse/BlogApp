@@ -143,6 +143,10 @@ public class SignUpFragment extends BaseFragment<SignUpFragmentBinding, SignUpVi
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-
+        if (isConnected) {
+            getBaseActivity(). getInternetDialog().dismiss();
+        } else {
+            getBaseActivity().getInternetDialog().show();
+        }
     }
 }

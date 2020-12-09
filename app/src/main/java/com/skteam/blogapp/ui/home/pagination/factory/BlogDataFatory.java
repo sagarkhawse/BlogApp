@@ -18,8 +18,8 @@ public class BlogDataFatory extends DataSource.Factory {
     private MutableLiveData<BlogDataSource> mutableBlogs = new MutableLiveData<>();
     private BlogDataSource blogDataSource;
 
-    public BlogDataFatory(HomeNav homeNav) {
-        blogDataSource = new BlogDataSource(homeNav);
+    public BlogDataFatory(HomeNav homeNav,String userId) {
+        blogDataSource = new BlogDataSource(userId,homeNav);
     }
 
     @NonNull

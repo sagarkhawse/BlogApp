@@ -15,15 +15,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseFragment;
 import com.skteam.blogapp.databinding.FragmentSplashBinding;
 import com.skteam.blogapp.setting.CommonUtils;
 import com.skteam.blogapp.ui.home.HomeActivity;
+
 import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -31,11 +35,12 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SplashFragment extends BaseFragment<FragmentSplashBinding, SplashViewModel> implements SplashNav {
     private static SplashFragment instance;
-    private static final int SPLASH_SCREEN_TIME_OUT=3;
+    private static final int SPLASH_SCREEN_TIME_OUT = 3;
     private FragmentSplashBinding binding;
     private Disposable disposable;
     private SplashViewModel viewModel;
     private Dialog internetDialog;
+
     public SplashFragment() {
         // Required empty public constructor
     }
@@ -44,6 +49,7 @@ public class SplashFragment extends BaseFragment<FragmentSplashBinding, SplashVi
         instance = instance == null ? new SplashFragment() : instance;
         return instance;
     }
+
     @Override
     public String toString() {
         return SplashFragment.class.getSimpleName();
@@ -61,7 +67,7 @@ public class SplashFragment extends BaseFragment<FragmentSplashBinding, SplashVi
 
     @Override
     public SplashViewModel getViewModel() {
-        return viewModel=new SplashViewModel(getContext(),getSharedPre(),getActivity());
+        return viewModel = new SplashViewModel(getContext(), getSharedPre(), getActivity());
     }
 
     @Override
@@ -80,24 +86,24 @@ public class SplashFragment extends BaseFragment<FragmentSplashBinding, SplashVi
         binding = getViewDataBinding();
         viewModel.setNavigator(this);
         binding.companyName.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
-       String tokenFinal=getSharedPre().getFirebaseDeviceToken() ;
-        if (tokenFinal==null || tokenFinal.isEmpty()) {
+        String tokenFinal = getSharedPre().getFirebaseDeviceToken();
+        if (tokenFinal == null || tokenFinal.isEmpty()) {
             try {
                 FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(task -> {
-                            if (!task.isSuccessful()) {
-                                Log.w("Firebase", "getInstanceId failed", task.getException());
-                                return;
-                            }
+                    if (!task.isSuccessful()) {
+                        Log.w("Firebase", "getInstanceId failed", task.getException());
+                        return;
+                    }
 
-                            // Get new Instance ID token
-                            String token = task.getResult().getToken();
-                            getSharedPre().setFirebaseToken(token);
-                            getSharedPre().setUserId(FirebaseInstanceId.getInstance().getId());
-                            disposable = Observable.timer(SPLASH_SCREEN_TIME_OUT, TimeUnit.SECONDS)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(aLong -> StartIntent());
-                        });
+                    // Get new Instance ID token
+                    String token = task.getResult().getToken();
+                    getSharedPre().setFirebaseToken(token);
+                    getSharedPre().setUserId(FirebaseInstanceId.getInstance().getId());
+                    disposable = Observable.timer(SPLASH_SCREEN_TIME_OUT, TimeUnit.SECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(aLong -> StartIntent());
+                });
             } catch (Exception e) {
             }
 
@@ -108,11 +114,13 @@ public class SplashFragment extends BaseFragment<FragmentSplashBinding, SplashVi
                     .subscribe(aLong -> StartIntent());
         }
     }
-    void StartIntent(){
 
+    void StartIntent() {
 
-           startActivity(new Intent(getBaseActivity(), HomeActivity.class));
-           getBaseActivity().finish();
+        getSharedPre().setUserId("007");
+        getSharedPre().setIsLoggedIn(true);
+        startActivity(new Intent(getBaseActivity(), HomeActivity.class));
+        getBaseActivity().finish();
 
 
     }
@@ -120,20 +128,19 @@ public class SplashFragment extends BaseFragment<FragmentSplashBinding, SplashVi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(disposable!=null){
+        if (disposable != null) {
             disposable.dispose();
         }
     }
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-        if (internetDialog == null) {
-            internetDialog = CommonUtils.InternetConnectionAlert(getBaseActivity(), false);
-        }
         if (isConnected) {
-            internetDialog.dismiss();
+            getBaseActivity().getInternetDialog().dismiss();
+            startActivity(new Intent(getBaseActivity(), HomeActivity.class));
+            getBaseActivity().finish();
         } else {
-            internetDialog.show();
+            getBaseActivity().getInternetDialog().show();
         }
     }
 }

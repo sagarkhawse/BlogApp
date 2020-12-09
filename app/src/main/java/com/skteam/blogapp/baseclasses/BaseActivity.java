@@ -7,6 +7,7 @@
 
 package com.skteam.blogapp.baseclasses;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -58,6 +59,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
     private RxPermissions rxPermissions;
     private boolean doubleBackToExitPressedOnce = false;
     private FirebaseAuth auth;
+    private Dialog internetDialog;
 
 //replace yourActivity.this with your own activity or if you declared a context you can write context.getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -301,6 +303,12 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
     public Fragment getCurrentFragment() {
         fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         return fragment;
+    }
+    public Dialog getInternetDialog(){
+        if (internetDialog == null) {
+            internetDialog = CommonUtils.InternetConnectionAlert(this, false);
+        }
+        return internetDialog;
     }
 
 }
