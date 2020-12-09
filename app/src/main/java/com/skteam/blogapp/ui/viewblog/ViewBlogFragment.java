@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,18 +69,18 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
         super.onActivityCreated(savedInstanceState);
         binding = getViewDataBinding();
         mViewModel.setNavigator(this);
-        ((HomeActivity)getContext()).getToolbar().back.setImageResource(R.drawable.ic_left_arrow);
-        ((HomeActivity)getContext()).getToolbar().title.setText("View Blog");
-        ((HomeActivity)getContext()).getToolbar().back.setOnClickListener(new View.OnClickListener() {
+        ((HomeActivity)getContext()).getToolbar().toolbarLay.setVisibility(View.GONE);
+
+        binding.ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((HomeActivity)getContext()).onBackPressed();
             }
         });
-        binding.blogTitle.setText(getVlogMain.getTitle());
-        Glide.with(getContext()).load(IMG_URL+getVlogMain.getImage()).into(binding.imgBlog);
-        binding.blogDiscription.setText(getVlogMain.getDescription());
-        binding.like.setOnClickListener(v -> {
+        binding.tvTitle.setText(getVlogMain.getTitle().trim());
+        Glide.with(getContext()).load(IMG_URL+getVlogMain.getImage()).into(binding.ivBlog);
+        binding.tvDesc.setText(getVlogMain.getDescription().trim());
+        binding.ivLike.setOnClickListener(v -> {
             if(getSharedPre().isLoggedIn()){
                 showCustomAlert("Blog Liked");
             }else{
@@ -87,13 +88,8 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
                 ((HomeActivity)getContext()).getBottomSheet().bottomLay.setVisibility(View.VISIBLE);
             }
         });
-        ((HomeActivity)getContext()).getBottomSheet().remindMeLater.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((HomeActivity)getContext()).getBottomSheet().bottomLay.setVisibility(View.GONE);
-            }
-        });
-        binding.comment.setOnClickListener(new View.OnClickListener() {
+//
+        binding.ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(getSharedPre().isLoggedIn()){
@@ -106,11 +102,12 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
 
     }
 
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((HomeActivity)getContext()).getToolbar().back.setImageResource(R.drawable.ic_drawer);
-        ((HomeActivity)getContext()).getToolbar().title.setText("Blogs");
+        ((HomeActivity)getContext()).getToolbar().toolbarLay.setVisibility(View.VISIBLE);
     }
 
     @Override

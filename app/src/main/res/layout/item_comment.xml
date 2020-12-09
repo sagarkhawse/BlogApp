@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="5dp"
+    android:orientation="vertical">
+
+<de.hdodenhof.circleimageview.CircleImageView
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:src="@drawable/ic_user"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
+    android:id="@+id/user_dp"
+    />
+
+    <RelativeLayout
+        android:id="@+id/cmt_re_lyt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/like_img"
+        android:layout_toEndOf="@id/user_dp"
+        android:padding="10dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_semibold"
+            android:id="@+id/username"
+            />
+
+        <TextView
+            android:id="@+id/user_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comment"
+            android:layout_below="@+id/username"
+            android:padding="1dp"
+            android:fontFamily="@font/avenir_next_medium"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="2dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_comment"
+            android:fontFamily="@font/poppins"
+            android:id="@+id/date"
+            android:textSize="12sp"
+            android:layout_marginTop="5dp"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/user_comment"
+            android:layout_alignParentEnd="true"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/likes"
+                android:textSize="12sp"
+                android:visibility="visible"
+                android:padding="5dp"
+                android:id="@+id/comment_likes"/>
+            <TextView
+                android:layout_marginStart="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reply"
+                android:id="@+id/reply"
+                android:textSize="12sp"
+                android:padding="5dp"
+                android:visibility="visible"
+                />
+
+            <ImageView
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete"
+                android:padding="@dimen/_5sdp"
+                android:contentDescription="@string/delete"
+                android:visibility="gone"
+                android:id="@+id/delete_comment"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_replies"
+            android:id="@+id/view_replies"
+            android:textSize="12sp"
+            android:fontFamily="@font/poppins_semibold"
+            android:layout_below="@id/date"
+            android:padding="5dp"
+            android:textStyle="italic"
+            />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        android:src="@drawable/ic_like"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20sp"
+        android:id="@+id/like_img"
+        android:contentDescription="@string/like"
+        />
+
+
+
+
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/reply_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/user_dp"
+        android:layout_below="@id/cmt_re_lyt"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:paddingEnd="10dp"
+        android:foreground="?attr/selectableItemBackground"
+        tools:ignore="RtlSymmetry,UnusedAttribute">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_user"
+        android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+        android:id="@+id/user_dp_reply"
+        />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_semibold"
+            android:id="@+id/username_reply"
+            android:layout_toEndOf="@id/user_dp_reply"
+            />
+
+        <TextView
+            android:id="@+id/user_comment_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comment"
+            android:layout_below="@+id/username_reply"
+            android:padding="1dp"
+            android:fontFamily="@font/avenir_next_medium"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="2dp"
+            android:layout_toEndOf="@id/user_dp_reply"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_comment_reply"
+            android:fontFamily="@font/poppins"
+            android:id="@+id/date_reply"
+            android:textSize="12sp"
+            android:layout_marginStart="20dp"
+            android:layout_alignParentEnd="true"
+            />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

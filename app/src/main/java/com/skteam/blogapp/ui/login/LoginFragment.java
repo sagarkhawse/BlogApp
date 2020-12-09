@@ -98,10 +98,10 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding, LoginViewM
             getVib().vibrate(100);
             getBaseActivity().onBackPressed();
         });
-        disposable = RxView.clicks(binding.toolbar.menu).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
-            getVib().vibrate(100);
-           showCustomAlert("Menu Click");
-        });
+//        disposable = RxView.clicks(binding.toolbar.menu).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
+//            getVib().vibrate(100);
+//           showCustomAlert("Menu Click");
+//        });
         binding.toolbar.title.setText("Login");
     }
 

@@ -73,10 +73,10 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
                 binding.drawer.openDrawer(Gravity.LEFT);
             }
         });
-        disposable = RxView.clicks(binding.toolbar.menu).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
-            getVibe().vibrate(100);
-            showCustomAlert("Menu Click");
-        });
+//        disposable = RxView.clicks(binding.toolbar.menu).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
+//            getVibe().vibrate(100);
+//            showCustomAlert("Menu Click");
+//        });
         if (savedInstanceState == null) {
             startFragment(HomeFragment.getInstance(), true, HomeFragment.getInstance().toString());
         }

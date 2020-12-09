@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.databinding.BlogItemBinding;
 import com.skteam.blogapp.restmodels.getBlogs.ResItem;
+import com.skteam.blogapp.setting.CommonUtils;
 import com.skteam.blogapp.ui.home.HomeActivity;
 import com.skteam.blogapp.ui.viewblog.ViewBlogFragment;
 
@@ -61,27 +62,17 @@ public class BlogAdapter extends PagedListAdapter<ResItem, BlogAdapter.BlogViewH
         }
 
         public void OnBindView(final ResItem item, int position) {
-            binding.blogDate.setText(item.getCreatedAt());
-            Glide.with(context).load(IMG_URL + item.getImage()).into(binding.imgBlog);
-            binding.blogTitle.setText(item.getTitle());
-            binding.blogDiscription.setText(item.getDescription());
-            binding.imgBlog.setOnClickListener(v -> ((HomeActivity) context).startFragment(ViewBlogFragment.newInstance(item), true, ViewBlogFragment.newInstance(item).toString()));
-            binding.like.setOnClickListener(v -> {
-                if (!((HomeActivity) context).getSharedPre().isLoggedIn()) {
-                    ((HomeActivity) context).getBottomSheet().bottomLay.setVisibility(View.VISIBLE);
-                } else {
+            binding.tvDate.setText(CommonUtils.dateFormat(item.getCreatedAt()));
+            Glide.with(context).load(IMG_URL + item.getImage()).into(binding.ivBlog);
+            binding.tvTitle.setText(item.getTitle().trim());
+            if (item.getDescription().length()>=50){
+                binding.tvDesc.setText(item.getDescription().trim().substring(0,50)+"...");
+            }else{
+                binding.tvDesc.setText(item.getDescription().trim());
+            }
 
-                }
+            binding.itemLayout.setOnClickListener(v -> ((HomeActivity) context).startFragment(ViewBlogFragment.newInstance(item), true, ViewBlogFragment.newInstance(item).toString()));
 
-            });
-            binding.comment.setOnClickListener(v -> {
-                if (!((HomeActivity) context).getSharedPre().isLoggedIn()) {
-                    ((HomeActivity) context).getBottomSheet().bottomLay.setVisibility(View.VISIBLE);
-                } else {
-
-                }
-
-            });
         }
     }
 

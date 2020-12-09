@@ -7,19 +7,20 @@
 
         <item
             android:id="@+id/status_nav"
+            android:icon="@drawable/ic_blog"
             android:title="@string/blog" />
         <item
             android:id="@+id/profile"
+            android:icon="@drawable/ic_user"
             android:title="@string/edit_profile" />
-
 
         <item
             android:id="@+id/nav_share_app"
-
+            android:icon="@drawable/ic_share"
             android:title="@string/share" />
         <item
             android:id="@+id/nav_privacy_policy"
-
+            android:icon="@drawable/ic_privacy_policy"
             android:title="@string/privacyolicy" />
 
 

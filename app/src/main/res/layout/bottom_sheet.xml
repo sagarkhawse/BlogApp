@@ -1,49 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/bottomLay"
-    android:visibility="visible"
-    android:orientation="vertical"
-    app:behavior_hideable="true"
-    android:gravity="center"
-    app:behavior_peekHeight="60dp"
-    app:layout_behavior="@string/bottom_sheet_behavior">
-<androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardCornerRadius="@dimen/_10sdp"
-    android:layout_margin="@dimen/_10sdp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_110sdp"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_15ssp"
-            android:gravity="center"
-            android:paddingLeft="@dimen/_5sdp"
-            android:textStyle="bold"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:text="Login Now"
-            android:id="@+id/blogTitle"/>
-        <include layout="@layout/layout_fb_google"
-            android:id="@+id/loginViaGoogle"/>
-        <TextView
-            android:id="@+id/remindMeLater"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/gray_semi_dark"
-            android:text="Remind me later"/>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
 
-</LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/bottomLay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:behavior_hideable="true"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_top_curve_black"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <ImageView
+                android:id="@+id/ivClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/close"
+                android:contentDescription="@string/close"/>
+
+            <TextView
+                android:id="@+id/blogTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/avenir_next_demi"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/login_via_google"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/_15ssp" />
+
+            <include
+                android:id="@+id/loginViaGoogle"
+                layout="@layout/layout_fb_google" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 </layout>

@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -265,4 +266,38 @@ public class CommonUtils {
 
 
     }
+
+    public static String dateFormat(String date) {
+
+        Calendar current_cal = Calendar.getInstance();
+
+        Calendar date_cal = Calendar.getInstance();
+
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date d = null;
+        try {
+            d = f.parse(date);
+            date_cal.setTime(d);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        long difference = (current_cal.getTimeInMillis() - date_cal.getTimeInMillis()) / 1000;
+
+        if (difference < 86400) {
+            if (current_cal.get(Calendar.DAY_OF_YEAR) - date_cal.get(Calendar.DAY_OF_YEAR) == 0) {
+
+                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+                return sdf.format(d);
+            } else
+                return "yesterday";
+        } else if (difference < 172800) {
+            return "yesterday";
+        } else
+            return (difference / 86400) + " day ago";
+
+
+    }
+
 }
