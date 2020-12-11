@@ -34,6 +34,8 @@ import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseViewModel;
 import com.skteam.blogapp.prefrences.SharedPre;
 import com.skteam.blogapp.restmodels.getBlogs.ResItem;
+import com.skteam.blogapp.restmodels.gteCatogry.CatResponse;
+import com.skteam.blogapp.restmodels.likeApi.LikeResponse;
 import com.skteam.blogapp.restmodels.signUp.SignUpResponse;
 import com.skteam.blogapp.setting.AppConstance;
 import com.skteam.blogapp.ui.home.pagination.datasource.BlogDataSource;
@@ -52,18 +54,23 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
     private GoogleSignInClient googleSignInClient;
     private GoogleSignInOptions gso;
     private String Profile="";
+    private PagedList.Config config;
     public HomeViewModel(Context context, SharedPre sharedPre, Activity activity) {
         super(context, sharedPre, activity);
         mAuth = FirebaseAuth.getInstance();
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(activity.getResources().getString(R.string.GOOGLE_SIGNIN_SECRET)).requestEmail().build();
         getGoogleClient();
+
     }
-    public void LoadPaging(HomeNav homeNav){
-        blogDataFatory= new BlogDataFatory(homeNav,getSharedPre().getUserId());
+    public void getCatogory(){
+        GetCategory();
+    }
+    public void LoadPaging(HomeNav homeNav,String catId){
+        blogDataFatory= new BlogDataFatory(homeNav,getSharedPre().getUserId(),catId);
         //GetLiveSource
         sourceLiveData=blogDataFatory.GetBlogsLive();
         //set PageList Config
-        PagedList.Config config= (new PagedList.Config.Builder()).setEnablePlaceholders(false).setInitialLoadSizeHint(10)
+         config= (new PagedList.Config.Builder()).setEnablePlaceholders(false).setInitialLoadSizeHint(10)
                 .setPageSize(5).setPrefetchDistance(4).build();
         //ThreadPool
         executor= Executors.newFixedThreadPool(5);
@@ -82,6 +89,27 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
             return googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
         }
 
+    }
+    private void GetCategory() {
+        AndroidNetworking.get(AppConstance.API_BASE_URL + AppConstance.GET_CATOGRY)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObject(CatResponse.class, new ParsedRequestListener<CatResponse>() {
+                    @Override
+                    public void onResponse(CatResponse response) {
+                        if (response != null && response.getCode().equalsIgnoreCase("200")) {
+                            getNavigator().GetCatogory(response.getRes());
+
+                        }else{
+                            getNavigator().getMessage("Server not Responding ");
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        getNavigator().getMessage("Server not Responding");
+                    }
+                });
     }
     //google
     public void SignUpViaGoogle(Intent data) {

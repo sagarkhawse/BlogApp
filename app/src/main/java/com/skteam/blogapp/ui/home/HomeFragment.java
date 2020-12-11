@@ -14,6 +14,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseFragment;
@@ -21,6 +22,10 @@ import com.skteam.blogapp.databinding.HomeFragmentBinding;
 import com.skteam.blogapp.restmodels.getBlogs.ResItem;
 import com.skteam.blogapp.setting.CommonUtils;
 import com.skteam.blogapp.ui.home.adapter.BlogAdapter;
+import com.skteam.blogapp.ui.home.adapter.CatogryAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewModel> implements HomeNav {
 
@@ -31,6 +36,9 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
     private Dialog internetDialog;
     private BlogAdapter blogAdapter;
     private PagedList<ResItem> getBlogList;
+    private CatogryAdapter catogryAdapter;
+    private HomeNav homeNav;
+    private List<com.skteam.blogapp.restmodels.gteCatogry.ResItem> getCatogry = new ArrayList<>();
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -71,21 +79,40 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
         super.onActivityCreated(savedInstanceState);
         binding = getViewDataBinding();
         viewModel.setNavigator(this);
-        viewModel.LoadPaging(this);
-        blogAdapter=new BlogAdapter(getContext());
+        viewModel.getCatogory();
+        homeNav = this;
+        blogAdapter = new BlogAdapter(getContext());
         binding.blogsRecycler.setAdapter(blogAdapter);
         viewModel.getAllLoginInformation();
+        viewModel.LoadPaging(this, "1");
         viewModel.getGeBarDtaList().observe(getBaseActivity(), resItems -> {
-            getBlogList=resItems;
-            blogAdapter.submitList(getBlogList);
+                getBlogList = resItems;
+                blogAdapter.submitList(getBlogList);
+
         });
+        binding.catogry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+                if (getCatogry != null && getCatogry.size() > 0) {
+                    viewModel.LoadPaging(homeNav, getCatogry.get(position).getCategoryId());
+                    viewModel.getGeBarDtaList().observe(getBaseActivity(), resItems -> {
+                        getBlogList = resItems;
+                        blogAdapter.submitList(getBlogList);       });
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+
 
     }
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         if (isConnected) {
-            getBaseActivity(). getInternetDialog().dismiss();
+            getBaseActivity().getInternetDialog().dismiss();
         } else {
             getBaseActivity().getInternetDialog().show();
         }
@@ -97,9 +124,9 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if(value){
+                if (value) {
                     showLoadingDialog("");
-                }else {
+                } else {
                     hideLoadingDialog();
                 }
             }
@@ -121,6 +148,17 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
 
     @Override
     public void StartHomeNow() {
-        viewModel.LoadPaging(this);
+        viewModel.getCatogory();
+    }
+
+    @Override
+    public void GetCatogory(List<com.skteam.blogapp.restmodels.gteCatogry.ResItem> res) {
+        getCatogry = res;
+        catogryAdapter = new CatogryAdapter(getContext(), R.layout.checked_spiiner, res);
+
+        binding.catogry.setAdapter(catogryAdapter);
+
+
+
     }
 }

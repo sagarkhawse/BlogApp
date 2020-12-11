@@ -21,8 +21,10 @@ import com.skteam.blogapp.databinding.ActivityHomeBinding;
 import com.skteam.blogapp.databinding.BottomSheetBinding;
 import com.skteam.blogapp.databinding.NavHeaderMainBinding;
 import com.skteam.blogapp.databinding.ToolbarBinding;
+import com.skteam.blogapp.restmodels.gteCatogry.ResItem;
 import com.skteam.blogapp.setting.CommonUtils;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -152,6 +154,11 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
 
     @Override
     public void StartHomeNow() {
+
+    }
+
+    @Override
+    public void GetCatogory(List<ResItem> res) {
 
     }
 

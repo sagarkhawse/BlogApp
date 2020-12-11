@@ -21,10 +21,12 @@ public class BlogDataSource extends PageKeyedDataSource<Long, ResItem> {
     private long page = 1;
     private String UserId = "0";
     private HomeNav homeNav;
+    private String catId;
 
-    public BlogDataSource(String userId,HomeNav homeNav) {
+    public BlogDataSource(String userId,HomeNav homeNav,String catId) {
         this.homeNav = homeNav;
         this.UserId=userId;
+        this.catId=catId;
     }
 
     @Override
@@ -33,6 +35,7 @@ public class BlogDataSource extends PageKeyedDataSource<Long, ResItem> {
         AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.BLOGS)
                 .addBodyParameter("user_id",UserId )
                 .addBodyParameter("page", String.valueOf(page))
+                .addBodyParameter("category_id",catId)
                 .setPriority(Priority.HIGH)
                 .build()
                 .getAsObject(BlogResponse.class, new ParsedRequestListener<BlogResponse>() {
@@ -69,6 +72,7 @@ public class BlogDataSource extends PageKeyedDataSource<Long, ResItem> {
         AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.BLOGS)
                 .addBodyParameter("user_id",UserId )
                 .addBodyParameter("page", String.valueOf(page))
+                .addBodyParameter("category_id",catId)
                 .build()
                 .getAsObject(BlogResponse.class, new ParsedRequestListener<BlogResponse>() {
                     @Override

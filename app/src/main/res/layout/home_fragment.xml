@@ -6,14 +6,38 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.home.HomeFragment">
-
-   <androidx.recyclerview.widget.RecyclerView
+   <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       android:id="@+id/blogsRecycler"
-       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-       android:orientation="vertical"
-       />
+      android:orientation="vertical">
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+         android:layout_weight=".08">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+            android:text="Catogory"
+            android:textSize="@dimen/_13ssp"
+            android:gravity="center"
+             android:paddingRight="@dimen/_10sdp"
+            android:paddingLeft="@dimen/_10sdp"/>
+         <Spinner
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+            android:id="@+id/catogry"/>
+
+      </LinearLayout>
+      <androidx.recyclerview.widget.RecyclerView
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight=".92"
+          android:id="@+id/blogsRecycler"
+          app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+          android:orientation="vertical"
+          />
+
+   </LinearLayout>
 
 
 </FrameLayout></layout>

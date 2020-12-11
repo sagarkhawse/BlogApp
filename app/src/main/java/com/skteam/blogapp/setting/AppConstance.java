@@ -22,6 +22,7 @@ public class AppConstance {
     public static final String IMG_URL ="https://androappdev.xyz/BlogApp/";
     public static final String BLOGS ="blogs";
     public static final String SIGN_UP ="sign_up";
+    public static final String GET_CATOGRY ="get_category";
     public static final String LIKE_BLOG ="like_unlike";
     public static final String LIKE_COMMENT ="like_unlike_comment";
     public static final String VIEW_ALL_COMMENT ="show_all_comments";
