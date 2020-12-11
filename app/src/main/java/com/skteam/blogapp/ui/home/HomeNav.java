@@ -7,6 +7,8 @@ import java.util.List;
 public interface HomeNav {
     void isLoading(boolean value);
     void getMessage(String message);
-    void StartHomeNow();
+
     void GetCatogory(List<ResItem> res);
+
+    void StartHomeNow(com.skteam.blogapp.restmodels.signUp.ResItem resItem);
 }

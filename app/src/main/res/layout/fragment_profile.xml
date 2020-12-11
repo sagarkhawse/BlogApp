@@ -11,37 +11,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_white"
     android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_60sdp"
-        android:gravity="center"
-        android:weightSum="1"
-        android:background="@drawable/bg_curve_bottom">
-        <LinearLayout
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/ivBack"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_left_arrow" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
 
-            android:layout_weight=".8">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="@string/edit_profile"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/_14ssp" />
-        </LinearLayout>
-
-    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
@@ -74,6 +44,7 @@
                 android:layout_height="@dimen/_40sdp"
                 android:inputType="text"
                 android:maxLines="1"
+                android:textColorHint="@color/gray_semi_dark"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15ssp"
                 android:hint="Name"/>
@@ -111,7 +82,7 @@
             android:textColorHint="@color/colorPrimaryDark"
             style="@style/parent.TextLayout"
             android:layout_marginTop="@dimen/signup_text_margin_top">
-            <EditText
+            <TextView
                 android:id="@+id/dob"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
@@ -138,7 +109,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="left"
                 android:checked="true"
-                android:buttonTint="@color/colorPrimaryDark"
+                android:buttonTint="@color/colorTheme3"
                 android:text="Male"/>
             <RadioButton
                 android:layout_width="0dp"
@@ -146,7 +117,7 @@
                 android:layout_weight="1"
                 android:id="@+id/female_radio"
                 android:layout_gravity="end"
-                android:buttonTint="@color/colorPrimaryDark"
+                android:buttonTint="@color/colorTheme3"
                 android:text="Female"/>
 
         </RadioGroup>

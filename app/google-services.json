@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "968931466478-vh456ftrv0b2v4hd6vudootaojmh1oi0.apps.googleusercontent.com",
+          "client_id": "968931466478-kgp6ndkutd3mvf0cpcda1dg7mmvsoe4q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.skteam.blogapp",
-            "certificate_hash": "44424eaaf78f357f8ad87c394c699d1e033269c6"
+            "certificate_hash": "e39f951de94896cd9d5a67b625418f7c0104e912"
           }
         },
         {
@@ -36,7 +36,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "968931466478-ca2o03sd7ipiosk7rsqv424pvs1ca3kg.apps.googleusercontent.com",
+              "client_id": "968931466478-9g2buvqp67iv7kau7orfh1982a6d3nep.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

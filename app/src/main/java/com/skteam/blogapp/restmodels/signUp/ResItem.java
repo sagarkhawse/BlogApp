@@ -24,6 +24,27 @@ public class ResItem{
 
 	@SerializedName("signup_type")
 	private String signupType;
+	@SerializedName("gender")
+	private String gender;
+
+	@SerializedName("date_of_birth")
+	private String dob;
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
 
 	public void setAppVersion(String appVersion){
 		this.appVersion = appVersion;

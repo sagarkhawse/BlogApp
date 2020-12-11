@@ -15,4 +15,5 @@ public interface LoginNav {
     void setLoading(boolean b);
 
     void StartHomeNow();
+
 }

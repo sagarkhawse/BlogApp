@@ -10,10 +10,12 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.navigation.NavigationView;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseActivity;
@@ -23,6 +25,9 @@ import com.skteam.blogapp.databinding.NavHeaderMainBinding;
 import com.skteam.blogapp.databinding.ToolbarBinding;
 import com.skteam.blogapp.restmodels.gteCatogry.ResItem;
 import com.skteam.blogapp.setting.CommonUtils;
+import com.skteam.blogapp.ui.login.LoginFragment;
+import com.skteam.blogapp.ui.profile.ProfileFragment;
+import com.skteam.blogapp.ui.splash.SplashActivity;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +43,9 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
     private Disposable disposable;
     private LinearLayout bottomSheet;
     private BottomSheetBehavior sheetBehavior;
+
     private NavHeaderMainBinding navigationViewHeaderBinding;
+
     @Override
     public int getBindingVariable() {
         return 1;
@@ -53,11 +60,12 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
     public HomeViewModel getViewModel() {
         return viewModel = new HomeViewModel(this, getSharedPre(), this);
     }
-    public BottomSheetBinding getBottomSheet(){
+
+    public BottomSheetBinding getBottomSheet() {
         return binding.bottomSheetId;
     }
 
-    public ToolbarBinding getToolbar(){
+    public ToolbarBinding getToolbar() {
         return binding.toolbar;
     }
 
@@ -65,11 +73,77 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = getViewDataBinding();
+        viewModel.setNavigator(this);
         binding.toolbar.title.setText("Blogs");
+        if (getSharedPre().getUserId() == null) {
+            getSharedPre().setUserId("007");
+        }
+
         navigationViewHeaderBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.nav_header_main, binding.navView, false);
         binding.navView.addHeaderView(navigationViewHeaderBinding.getRoot());
+        if (getSharedPre().isLoggedIn()) {
+            navigationViewHeaderBinding.btnLogout.setText(getString(R.string.logout));
+            navigationViewHeaderBinding.navHeaderTitle.setText(getSharedPre().getName());
+            navigationViewHeaderBinding.navHeaderSubtitle.setText(getSharedPre().getUserEmail());
+        } else {
+            navigationViewHeaderBinding.btnLogout.setText(getString(R.string.login));
+            navigationViewHeaderBinding.navHeaderTitle.setText(getString(R.string.app_name));
+            navigationViewHeaderBinding.navHeaderSubtitle.setText(getString(R.string.app_name) + "@" + getString(R.string.app_name) + ".com");
+        }
         sheetBehavior = BottomSheetBehavior.from(binding.bottomSheetId.bottomLay);
+        viewModel.getAllLoginInformation();
         BottomSheetCheck();
+        ClickListners();
+        if (savedInstanceState == null) {
+            startFragment(HomeFragment.getInstance(), true, HomeFragment.getInstance().toString());
+        }
+    }
+
+    private void ClickListners() {
+        navigationViewHeaderBinding.btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getSharedPre().isLoggedIn()) {
+                    viewModel.getmAuth().signOut();
+                    getSharedPre().Logout();
+                    startActivity(new Intent(HomeActivity.this, SplashActivity.class));
+                    finish();
+                } else {
+                    if (binding.drawer.isDrawerOpen(Gravity.LEFT)) {
+                        binding.drawer.closeDrawer(Gravity.LEFT);
+                    } else {
+                        binding.drawer.openDrawer(Gravity.LEFT);
+                    }
+                    startFragment(LoginFragment.newInstance(), true, LoginFragment.newInstance().toString());
+                }
+            }
+        });
+        binding.navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.profile: {
+                        startFragment(ProfileFragment.newInstance(), true, ProfileFragment.newInstance().toString());
+                        break;
+                    }
+                    case R.id.nav_share_app: {
+                        break;
+                    }
+                    case R.id.nav_privacy_policy: {
+                        break;
+                    }
+                    case R.id.blogs: {
+                        break;
+                    }
+                }
+                if (binding.drawer.isDrawerOpen(Gravity.LEFT)) {
+                    binding.drawer.closeDrawer(Gravity.LEFT);
+                } else {
+                    binding.drawer.openDrawer(Gravity.LEFT);
+                }
+                return false;
+            }
+        });
 
         disposable = RxView.clicks(binding.toolbar.back).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
             getVibe().vibrate(100);
@@ -87,9 +161,6 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
             getVibe().vibrate(100);
             CallGoogleApi();
         });
-        if (savedInstanceState == null) {
-            startFragment(HomeFragment.getInstance(), true, HomeFragment.getInstance().toString());
-        }
     }
 
     private void BottomSheetCheck() {
@@ -132,6 +203,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
 
         if (isConnected) {
             getInternetDialog().dismiss();
+            viewModel.getAllLoginInformation();
         } else {
             getInternetDialog().show();
         }
@@ -139,27 +211,37 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
 
     @Override
     public void isLoading(boolean value) {
-        if(value){
-          showLoadingDialog("");
-        }else{
-         hideLoadingDialog();
+        if (value) {
+            showLoadingDialog("");
+        } else {
+            hideLoadingDialog();
         }
 
     }
 
     @Override
     public void getMessage(String message) {
-
-    }
-
-    @Override
-    public void StartHomeNow() {
-
+        showCustomAlert(message);
     }
 
     @Override
     public void GetCatogory(List<ResItem> res) {
 
+    }
+
+    @Override
+    public void StartHomeNow(com.skteam.blogapp.restmodels.signUp.ResItem resItem) {
+        if (resItem != null) {
+            if (getSharedPre().isLoggedIn()) {
+                navigationViewHeaderBinding.btnLogout.setText(getString(R.string.logout));
+                navigationViewHeaderBinding.navHeaderTitle.setText(getSharedPre().getName());
+                navigationViewHeaderBinding.navHeaderSubtitle.setText(getSharedPre().getUserEmail());
+            } else {
+                navigationViewHeaderBinding.btnLogout.setText(getString(R.string.login));
+                navigationViewHeaderBinding.navHeaderTitle.setText(getString(R.string.app_name));
+                navigationViewHeaderBinding.navHeaderSubtitle.setText(getString(R.string.app_name) + "@" + getString(R.string.app_name) + ".com");
+            }
+        }
     }
 
 
@@ -168,6 +250,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
         Intent signInIntent = viewModel.getGoogleClient().getSignInIntent();
         startActivityForResult(signInIntent, GOOGLE_REQUEST_CODE);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -181,8 +264,5 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
         }
     }
 
-    public void startFragment(Fragment fragment,String name){
-        startFragment(fragment,true,name);
-    }
 
 }

@@ -117,8 +117,6 @@ public class SplashFragment extends BaseFragment<FragmentSplashBinding, SplashVi
 
     void StartIntent() {
 
-        getSharedPre().setUserId("007");
-        getSharedPre().setIsLoggedIn(true);
         startActivity(new Intent(getBaseActivity(), HomeActivity.class));
         getBaseActivity().finish();
 

@@ -2,28 +2,39 @@ package com.skteam.blogapp.ui.profile;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
+
 import com.bumptech.glide.Glide;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.skteam.blogapp.BuildConfig;
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseFragment;
 import com.skteam.blogapp.databinding.FragmentProfileBinding;
+import com.skteam.blogapp.restmodels.uploadDp.ResItem;
+import com.skteam.blogapp.setting.AppConstance;
 import com.skteam.blogapp.setting.CommonUtils;
 import com.skteam.blogapp.setting.FileAccess;
 import com.skteam.blogapp.ui.home.HomeActivity;
@@ -31,7 +42,9 @@ import com.skteam.blogapp.ui.home.HomeActivity;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -54,6 +67,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding, Profil
     private String mCameraFileName;
     private Uri tempUri;
     private File finalFile;
+    String [] permissions={Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -91,7 +105,17 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding, Profil
         super.onViewCreated(view, savedInstanceState);
         binding = getViewDataBinding();
         viewmodel.setNavigator(this);
-        ((HomeActivity)getBaseActivity()).getToolbar().toolbarLay.setVisibility(View.GONE);
+        viewmodel.getAllLoginInformation();
+        // ((HomeActivity)getBaseActivity()).getToolbar().toolbarLay.setVisibility(View.GONE);
+        binding.name.setText(getSharedPre().getName());
+        binding.email.setText(getSharedPre().getUserEmail());
+        if(gender.equalsIgnoreCase("male")){
+            binding.femaleRadio.setChecked(false);
+            binding.maleRadio.setChecked(true);
+        }else{
+            binding.femaleRadio.setChecked(true);
+            binding.maleRadio.setChecked(false);
+        }
         binding.maleRadio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -109,19 +133,54 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding, Profil
                     @Override
                     public void accept(Boolean aBoolean) throws Exception {
                         if (aBoolean) {
-                            showImgDialog(getActivity(), false).show();
+                           if( hasPermissions(getContext(),permissions)) {
+                               showImgDialog(getActivity(), false).show();
+                           }
                         } else {
                             showCustomAlert("Please Give Permission First!");
                         }
                     }
                 });
-        disposable = RxView.clicks(binding.ivBack).observeOn(AndroidSchedulers.mainThread())
-                .throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(new Consumer<Unit>() {
-                    @Override
-                    public void accept(Unit unit) throws Exception {
-                        getBaseActivity().onBackPressed();
-                    }
-                });
+        binding.submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(binding.name.getText().toString().isEmpty()){
+                  showCustomAlert("Name Not be Empty");
+                }else if(binding.email.getText().toString().isEmpty()){
+                    showCustomAlert("Email Not be Empty");
+                }else if(binding.dob.getText().toString().isEmpty()){
+                    showCustomAlert("Date of Birth Not be Empty");
+                }else if(gender.isEmpty()){
+                    showCustomAlert("Gender Not be Empty");
+                }else if(binding.phone.getText().toString().isEmpty()){
+                    showCustomAlert("phone Not be Empty");
+                }
+                else{
+                    viewmodel.EditNow(binding.name.getText().toString(),binding.phone.getText().toString(),binding.dob.getText().toString(),gender);
+                }
+
+            }
+        });
+        binding.dob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateTimePicker();
+            }
+        });
+
+
+    }
+    public void showDateTimePicker() {
+        final Calendar currentDate = Calendar.getInstance();
+        Calendar date = Calendar.getInstance();
+
+        new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                date.set(year, monthOfYear, dayOfMonth);
+                binding.dob.setText(CommonUtils.CurrentTimeAsFormat2(date.getTimeInMillis(), "yyyy-MM-dd"));
+            }
+        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
 
     }
 
@@ -149,6 +208,42 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding, Profil
     @Override
     public void setMessage(String s) {
         showCustomAlert(s);
+    }
+
+    @Override
+    public void SetDataNow(com.skteam.blogapp.restmodels.signUp.ResItem resItem) {
+        binding.email.setText(resItem.getEmail());
+        binding.name.setText(resItem.getName());
+        if(!resItem.getProfilePic().isEmpty()){
+            Uri uri = Uri.parse(resItem.getProfilePic());
+            String protocol = uri.getScheme();
+            String server = uri.getAuthority();
+            if (protocol != null && server != null) {
+                Glide.with(getContext()).load(resItem.getProfilePic()).into(binding.userDp);
+            } else {
+                Glide.with(getContext()).load(AppConstance.IMG_URL + resItem.getProfilePic()).into(binding.userDp);
+            }
+        }
+
+        if(resItem.getGender()!=null && resItem.getGender().isEmpty()){
+            if(resItem.getGender().equalsIgnoreCase("male")){
+                gender="male";
+                binding.femaleRadio.setChecked(false);
+                binding.maleRadio.setChecked(true);
+            }else{
+                gender="Female";
+                binding.femaleRadio.setChecked(true);
+                binding.maleRadio.setChecked(false);
+            }
+        }
+        if(resItem.getDob()!=null && !resItem.getDob().isEmpty()){
+            binding.dob.setText(resItem.getDob());
+        }
+    }
+
+    @Override
+    public void OkDone() {
+        getBaseActivity().onBackPressed();
     }
 
     public Dialog showImgDialog(Context activity, boolean isCancelable) {
@@ -225,8 +320,13 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding, Profil
                                 Glide.with(getContext()).load(selectedImage)
                                         .placeholder(R.drawable.ic_user)
                                         .into(binding.userDp);
-
-                               // binding.userDp.setImageURI(selectedImage);
+                                viewmodel.UploadProfile(finalFile).observe(getBaseActivity(), new Observer<List<ResItem>>() {
+                                    @Override
+                                    public void onChanged(List<ResItem> resItems) {
+                                        getSharedPre().setClientProfile(resItems.get(0).getProfilePic());
+                                    }
+                                });
+                                // binding.userDp.setImageURI(selectedImage);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -257,6 +357,12 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding, Profil
                         if (!finalFile.exists()) {
                             finalFile.mkdir();
                         }
+                        viewmodel.UploadProfile(finalFile).observe(getBaseActivity(), new Observer<List<ResItem>>() {
+                            @Override
+                            public void onChanged(List<ResItem> resItems) {
+                                getSharedPre().setClientProfile(resItems.get(0).getProfilePic());
+                            }
+                        });
 
                     } else if (resultCode == Activity.RESULT_CANCELED) {
                         //  Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show();
@@ -276,6 +382,18 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding, Profil
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((HomeActivity)getBaseActivity()).getToolbar().toolbarLay.setVisibility(View.VISIBLE);
+        ((HomeActivity) getBaseActivity()).getToolbar().toolbarLay.setVisibility(View.VISIBLE);
     }
+
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }

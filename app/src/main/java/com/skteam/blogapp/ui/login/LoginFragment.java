@@ -24,6 +24,8 @@ import com.skteam.blogapp.baseclasses.BaseFragment;
 import com.skteam.blogapp.databinding.FragmentLoginBinding;
 import com.skteam.blogapp.setting.CommonUtils;
 import com.skteam.blogapp.ui.home.HomeActivity;
+import com.skteam.blogapp.ui.home.HomeFragment;
+import com.skteam.blogapp.ui.signup.SignUpFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -88,22 +90,11 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding, LoginViewM
         super.onViewCreated(view, savedInstanceState);
         viewModel.setNavigator(this);
         binding = getViewDataBinding();
-        toolbar();
         SetClickListeners();
 
     }
 
-    private void toolbar() {
-        disposable = RxView.clicks(binding.toolbar.back).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
-            getVib().vibrate(100);
-            getBaseActivity().onBackPressed();
-        });
-//        disposable = RxView.clicks(binding.toolbar.menu).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
-//            getVib().vibrate(100);
-//           showCustomAlert("Menu Click");
-//        });
-        binding.toolbar.title.setText("Login");
-    }
+
 
     private void SetClickListeners() {
         disposable = RxView.clicks(binding.loginBtn).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
@@ -111,6 +102,10 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding, LoginViewM
             LoginNow();
         });
 
+        disposable = RxView.clicks(binding.SignUpBtn).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
+            getVib().vibrate(100);
+            getBaseActivity().startFragment(SignUpFragment.newInstance(),true,SignUpFragment.newInstance().toString());
+        });
         disposable = RxView.clicks(binding.otherSigninOption.googleBtn).throttleFirst(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unit -> {
             getVib().vibrate(100);
             CallGoogleApi();
@@ -183,7 +178,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding, LoginViewM
 
     @Override
     public void StartHomeNow() {
-        startActivity(new Intent(getActivity(), HomeActivity.class));
+        getBaseActivity().startFragment(HomeFragment.getInstance(),true,HomeFragment.getInstance().toString());
     }
 
     @Override

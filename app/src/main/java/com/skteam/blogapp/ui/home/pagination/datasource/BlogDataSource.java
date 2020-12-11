@@ -31,7 +31,6 @@ public class BlogDataSource extends PageKeyedDataSource<Long, ResItem> {
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Long> params, @NonNull LoadInitialCallback<Long, ResItem> callback) {
-        homeNav.isLoading(true);
         AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.BLOGS)
                 .addBodyParameter("user_id",UserId )
                 .addBodyParameter("page", String.valueOf(page))
@@ -47,8 +46,6 @@ public class BlogDataSource extends PageKeyedDataSource<Long, ResItem> {
                                page++;
                                 callback.onResult(response.getRes(), null, pageKey);
                             }
-                        }else{
-                            homeNav.getMessage("Server not Responding ");
                         }
 
                     }
@@ -83,7 +80,7 @@ public class BlogDataSource extends PageKeyedDataSource<Long, ResItem> {
                               page++;
                                 callback.onResult(response.getRes(), params.key + 1);
                             }else{
-                                homeNav.getMessage("No More Data");
+                                //homeNav.getMessage("No More Data");
                             }
                         }
                         else{

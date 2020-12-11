@@ -15,13 +15,16 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
+
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.application.MyApplication;
 import com.skteam.blogapp.brodcastReceivers.ConnectionReceiver;
@@ -40,7 +43,8 @@ public abstract class BaseFragment<B extends ViewDataBinding, V extends BaseView
     private RoomDatabase database;
     private Toast toast;
     private ConnectionReceiver.ConnectionReceiverListener connectionReceiverListener;
-   private Vibrator vibe ;
+    private Vibrator vibe;
+
     /**
      * Override for set binding variable
      *
@@ -67,9 +71,10 @@ public abstract class BaseFragment<B extends ViewDataBinding, V extends BaseView
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
     }
-    public Vibrator getVib(){
-        if(vibe==null){
-           vibe = (Vibrator) getBaseActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
+    public Vibrator getVib() {
+        if (vibe == null) {
+            vibe = (Vibrator) getBaseActivity().getSystemService(Context.VIBRATOR_SERVICE);
         }
         return vibe;
     }
@@ -94,8 +99,10 @@ public abstract class BaseFragment<B extends ViewDataBinding, V extends BaseView
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(progressDialog!=null && progressDialog.isShowing()){
-            progressDialog.dismiss();
+        if (progressDialog != null) {
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
         }
     }
 
@@ -103,11 +110,12 @@ public abstract class BaseFragment<B extends ViewDataBinding, V extends BaseView
     public void onDetach() {
         super.onDetach();
     }
+
     public SharedPre getSharedPre() {
-        if(sharedPre!=null){
+        if (sharedPre != null) {
             return sharedPre;
-        }else{
-            sharedPre=SharedPre.getInstance(getContext());
+        } else {
+            sharedPre = SharedPre.getInstance(getContext());
             return sharedPre;
         }
     }
@@ -116,7 +124,7 @@ public abstract class BaseFragment<B extends ViewDataBinding, V extends BaseView
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-         toast = new Toast(getContext());
+        toast = new Toast(getContext());
         mViewDataBinding.setVariable(getBindingVariable(), mViewModel);
         mViewDataBinding.setLifecycleOwner(this);
         mViewDataBinding.executePendingBindings();
@@ -136,7 +144,12 @@ public abstract class BaseFragment<B extends ViewDataBinding, V extends BaseView
         if (progressDialog == null)
             progressDialog = CommonUtils.showLoadingDialog(getContext(), "Please wait");
         else
-            progressDialog.show();
+            try {
+
+                progressDialog.show();
+            }catch (WindowManager.BadTokenException e) {
+                //use a log message
+            }
     }
 
     public void hideLoadingDialog() {
@@ -146,10 +159,12 @@ public abstract class BaseFragment<B extends ViewDataBinding, V extends BaseView
 
     public void showCustomAlert(String msg) {
         CustomToastBinding toastBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.custom_toast, null, false);
-        toastBinding.toastText.setText(msg);
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
-        toast.setView(toastBinding.getRoot());
-        toast.show();
+        if (toastBinding != null) {
+            toastBinding.toastText.setText(msg);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
+            toast.setView(toastBinding.getRoot());
+            toast.show();
+        }
     }
 }

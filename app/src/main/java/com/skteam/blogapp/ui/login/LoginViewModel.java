@@ -16,6 +16,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import androidx.annotation.NonNull;
+
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,6 +39,7 @@ import com.skteam.blogapp.BuildConfig;
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseViewModel;
 import com.skteam.blogapp.prefrences.SharedPre;
+import com.skteam.blogapp.restmodels.signUp.SignUpResponse;
 import com.skteam.blogapp.setting.AppConstance;
 
 import org.json.JSONObject;
@@ -110,14 +116,14 @@ public class LoginViewModel extends BaseViewModel<LoginNav> {
                         getNavigator().setLoading(false);
                         getSharedPre().setIsLoggedIn(true);
                         getSharedPre().setIsRegister(true);
-                       // LoginClient(user.getUid(),AppConstance.LOGIN_TYPE_EMAIL);
+                      LoginClient(user.getUid(),AppConstance.LOGIN_TYPE_EMAIL);
                     } else {
                         getNavigator().setLoading(false);
                         getNavigator().onLoginFail("Username or Password Mismatch!!");
                     }
                 });
     }
-    //firebase login via client
+
     private void firebaseAuthWithClient(String idToken,String type) {
         AuthCredential credential=null;
         String typeFinal =null;
@@ -128,12 +134,7 @@ public class LoginViewModel extends BaseViewModel<LoginNav> {
                 typeFinal=AppConstance.LOGIN_TYPE_GOOGLE;
                 break;
             }
-            case AppConstance.LOGIN_TYPE_FB:{
-                credential = FacebookAuthProvider.getCredential(idToken);
-                Profile=getSharedPre().getClientProfile();
-                typeFinal=AppConstance.LOGIN_TYPE_FB;
-                break;
-            }
+
             default:{
                 credential=null;
                 Profile="";
@@ -154,7 +155,7 @@ public class LoginViewModel extends BaseViewModel<LoginNav> {
                                 getSharedPre().setUserEmail(user.getEmail());
                                 getSharedPre().setIsLoggedIn(true);
                                 getSharedPre().setIsRegister(true);
-                               // LoginClient(getSharedPre().getName(),user.getEmail(),Profile,user.getUid(),finalTypeFinal, BuildConfig.VERSION_NAME);
+                             LoginClient(getSharedPre().getName(),user.getEmail(),Profile,user.getUid(),finalTypeFinal, BuildConfig.VERSION_NAME);
                             } else {
                                 // If sign in fails, display a message to the user.
 
@@ -178,7 +179,73 @@ public class LoginViewModel extends BaseViewModel<LoginNav> {
         getmAuth().signOut();
     }
 
+    private void LoginClient(String name, String email, String profile, String uid, String finalTypeFinal, String versionName) {
+       getNavigator().setLoading(true);
+        AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.SIGN_UP)
+                .addBodyParameter("user_id", uid)
+                .addBodyParameter("name", name)
+                .addBodyParameter("email", email)
+                .addBodyParameter("app_version", versionName)
+                .addBodyParameter("verified", "1")
+                .addBodyParameter("signup_type", finalTypeFinal)
+                .addBodyParameter("profile_pic", profile)
+                .addBodyParameter("phone", "0")
+                .addBodyParameter("gender", "")
+                .addBodyParameter("date_of_birth", "")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObject(SignUpResponse.class, new ParsedRequestListener<SignUpResponse>() {
+                    @Override
+                    public void onResponse(SignUpResponse response) {
+                        getNavigator().setLoading(false);
+                        if (response != null) {
+                            if (response.getCode().equals("200")) {
+                                getSharedPre().setIsLoggedIn(true);
+                                getSharedPre().setName(response.getRes().get(0).getName());
+                                getSharedPre().setUserEmail(response.getRes().get(0).getEmail());
+                                getNavigator().StartHomeNow();
+                            } else {
+                                getNavigator().onLoginFail("Server Not Responding");
+                            }
+                        }
+                    }
 
+                    @Override
+                    public void onError(ANError error) {
+                        getNavigator().setLoading(false);
+                        getNavigator().onLoginFail("Server Not Responding");
+                    }
+                });
+    }
+    public void LoginClient(String uid, String loginTypeEmail){
+            AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.SIGN_UP)
+                    .addBodyParameter("user_id", uid)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsObject(SignUpResponse.class, new ParsedRequestListener<SignUpResponse>() {
+                        @Override
+                        public void onResponse(SignUpResponse response) {
+
+                            if (response != null) {
+                                if (response.getCode().equals("200")) {
+                                    getSharedPre().setIsLoggedIn(true);
+                                    getSharedPre().setName(response.getRes().get(0).getName());
+                                    getSharedPre().setUserEmail(response.getRes().get(0).getEmail());
+                                    getSharedPre().setClientProfile(response.getRes().get(0).getProfilePic());
+                                    getNavigator().StartHomeNow();
+                                } else {
+                                    getNavigator().onLoginFail("Server Not Responding");
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError error) {
+                            getNavigator().onLoginFail("Server Not Responding");
+                        }
+                    });
+
+    }
     public void forgotPassword(String email) {
         getNavigator().setLoading(true);
         getmAuth().setLanguageCode("en");

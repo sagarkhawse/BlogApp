@@ -83,8 +83,9 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
         homeNav = this;
         blogAdapter = new BlogAdapter(getContext());
         binding.blogsRecycler.setAdapter(blogAdapter);
-        viewModel.getAllLoginInformation();
+
         viewModel.LoadPaging(this, "1");
+
         viewModel.getGeBarDtaList().observe(getBaseActivity(), resItems -> {
                 getBlogList = resItems;
                 blogAdapter.submitList(getBlogList);
@@ -113,6 +114,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
     public void onNetworkConnectionChanged(boolean isConnected) {
         if (isConnected) {
             getBaseActivity().getInternetDialog().dismiss();
+            viewModel.getCatogory();
         } else {
             getBaseActivity().getInternetDialog().show();
         }
@@ -146,10 +148,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
 
     }
 
-    @Override
-    public void StartHomeNow() {
-        viewModel.getCatogory();
-    }
 
     @Override
     public void GetCatogory(List<com.skteam.blogapp.restmodels.gteCatogry.ResItem> res) {
@@ -160,5 +158,10 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
 
 
 
+    }
+
+    @Override
+    public void StartHomeNow(com.skteam.blogapp.restmodels.signUp.ResItem resItem) {
+        viewModel.getCatogory();
     }
 }

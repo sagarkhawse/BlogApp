@@ -113,6 +113,14 @@
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/blog_image" />
 
+                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                    android:id="@+id/youtube_player_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:autoPlay="false"
+                    app:showFullScreenButton="false" />
+
 
                 <TextView
                     android:id="@+id/tvDesc"

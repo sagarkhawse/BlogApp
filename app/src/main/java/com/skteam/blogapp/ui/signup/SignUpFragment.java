@@ -13,6 +13,8 @@ import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseFragment;
 import com.skteam.blogapp.databinding.SignUpFragmentBinding;
 import com.skteam.blogapp.setting.CommonUtils;
+import com.skteam.blogapp.ui.home.HomeFragment;
+import com.skteam.blogapp.ui.login.LoginFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -139,6 +141,15 @@ public class SignUpFragment extends BaseFragment<SignUpFragmentBinding, SignUpVi
         showCustomAlert(message);
     }
 
+    @Override
+    public void StartLogin() {
+        getBaseActivity().startFragment(LoginFragment.newInstance(),true,LoginFragment.newInstance().toString());
+    }
+
+    @Override
+    public void startHome() {
+        getBaseActivity().startFragment(HomeFragment.getInstance(),true,HomeFragment.getInstance().toString());
+    }
 
 
     @Override

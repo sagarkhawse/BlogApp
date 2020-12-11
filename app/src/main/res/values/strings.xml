@@ -62,9 +62,8 @@
 
 
     <!--    Login   -->
-    <string name="facebook_app_id">748893089056086</string>
-    <string name="fb_protocol">fb748893089056086</string>
-    <string name="ACCOUNT_KIT_CLIENT_TOKEN">3aa80d669d9a65edd236b213e060b05d</string>
+
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">VIN-2AFS9o8s4muv5iHUGmok</string>
     <string name="GOOGLE_SIGNIN_SECRET">968931466478-9g2buvqp67iv7kau7orfh1982a6d3nep.apps.googleusercontent.com</string>
 
 

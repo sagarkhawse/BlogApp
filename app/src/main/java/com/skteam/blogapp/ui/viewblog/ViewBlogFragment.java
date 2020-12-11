@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseFragment;
 import com.skteam.blogapp.databinding.ViewBlogFragmentBinding;
@@ -83,6 +85,15 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
             binding.ivLikeTop.setImageResource(R.drawable.ic_liked);
 
         }
+        getLifecycle().addObserver(binding.youtubePlayerView);
+
+        binding.youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                String videoId = "S0Q4gqBUs7c";
+                //youTubePlayer.loadVideo(videoId, 0);
+            }
+        });
        setClickListeners();
 
     }

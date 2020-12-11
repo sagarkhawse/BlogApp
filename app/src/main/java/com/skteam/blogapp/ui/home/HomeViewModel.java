@@ -78,6 +78,9 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
         getBlogList=(new LivePagedListBuilder<Long,ResItem>(blogDataFatory,config)).setFetchExecutor(executor).build();
     }
 
+    public FirebaseAuth getmAuth() {
+        return mAuth;
+    }
 
     public LiveData<PagedList<ResItem>> getGeBarDtaList() {
         return getBlogList;
@@ -91,6 +94,7 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
 
     }
     private void GetCategory() {
+
         AndroidNetworking.get(AppConstance.API_BASE_URL + AppConstance.GET_CATOGRY)
                 .setPriority(Priority.HIGH)
                 .build()
@@ -143,6 +147,7 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
             Log.e("googleStatus", "signInResult:failed code=" + e.getStatusCode());
         }
     }
+
     private void firebaseAuthWithClient(String idToken,String type) {
         AuthCredential credential=null;
         String typeFinal =null;
@@ -153,12 +158,7 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
                 typeFinal=AppConstance.LOGIN_TYPE_GOOGLE;
                 break;
             }
-            case AppConstance.LOGIN_TYPE_FB:{
-                credential = FacebookAuthProvider.getCredential(idToken);
-                Profile=getSharedPre().getClientProfile();
-                typeFinal=AppConstance.LOGIN_TYPE_FB;
-                break;
-            }
+
             default:{
                 credential=null;
                 Profile="";
@@ -216,9 +216,10 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
                         getNavigator().isLoading(false);
                         if (response != null) {
                             if (response.getCode().equals("200")) {
+                                getSharedPre().setIsLoggedIn(true);
                                 getSharedPre().setName(response.getRes().get(0).getName());
                                 getSharedPre().setUserEmail(response.getRes().get(0).getEmail());
-                                getNavigator().StartHomeNow();
+                                getNavigator().StartHomeNow(response.getRes().get(0));
                             } else {
                                 getNavigator().getMessage("Server Not Responding");
                             }
@@ -234,31 +235,33 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
     }
 
     public void getAllLoginInformation(){
-        AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.SIGN_UP)
-                .addBodyParameter("user_id", getSharedPre().getUserId())
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsObject(SignUpResponse.class, new ParsedRequestListener<SignUpResponse>() {
-                    @Override
-                    public void onResponse(SignUpResponse response) {
-                        getNavigator().isLoading(false);
-                        if (response != null) {
-                            if (response.getCode().equals("200")) {
-                                getSharedPre().setName(response.getRes().get(0).getName());
-                                getSharedPre().setUserEmail(response.getRes().get(0).getEmail());
-                                getSharedPre().setClientProfile(response.getRes().get(0).getProfilePic());
-                                getNavigator().StartHomeNow();
-                            } else {
-                                getNavigator().getMessage("Server Not Responding");
+        if(getSharedPre().getUserId()!=null && !getSharedPre().getUserId().isEmpty()) {
+            String userId=getSharedPre().getUserId();
+            AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.SIGN_UP)
+                    .addBodyParameter("user_id", userId)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsObject(SignUpResponse.class, new ParsedRequestListener<SignUpResponse>() {
+                        @Override
+                        public void onResponse(SignUpResponse response) {
+
+                            if (response != null) {
+                                if (response.getCode().equals("200")) {
+                                    getSharedPre().setName(response.getRes().get(0).getName());
+                                    getSharedPre().setUserEmail(response.getRes().get(0).getEmail());
+                                    getSharedPre().setClientProfile(response.getRes().get(0).getProfilePic());
+                                    getNavigator().StartHomeNow(response.getRes().get(0));
+                                } else {
+                                    getNavigator().getMessage("Server Not Responding");
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onError(ANError error) {
-                        getNavigator().isLoading(false);
-                        getNavigator().getMessage("Server Not Responding");
-                    }
-                });
+                        @Override
+                        public void onError(ANError error) {
+                            getNavigator().getMessage("Server Not Responding");
+                        }
+                    });
+        }
     }
 }

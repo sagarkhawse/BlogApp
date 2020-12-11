@@ -266,6 +266,16 @@ public class CommonUtils {
 
 
     }
+    public static String CurrentTimeAsFormat2(long curentTimeStamp,String format)  {
+
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(curentTimeStamp);
+        return formatter.format(calendar.getTime());
+
+
+    }
+
 
     public static String dateFormat(String date) {
 

@@ -37,7 +37,6 @@ public class MyApplication extends Application implements LifeCycleDelegate {
         networkintentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)
-                .addInterceptor(logInter)
                 .readTimeout(30, TimeUnit.SECONDS)
                 . writeTimeout(60, TimeUnit.SECONDS)
                 .build();

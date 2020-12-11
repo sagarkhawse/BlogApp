@@ -81,84 +81,87 @@ public class CommentAdapter extends RecyclerView.Adapter< CommentAdapter.Comment
         }
 
         public void OnBindView(final ResItem item, int position) {
-            binding.date.setText(item.getDate());
-            Uri uri = Uri.parse(item.getProfilePic());
-            String protocol = uri.getScheme();
-            String server = uri.getAuthority();
-            if (protocol != null && server != null) {
-                Glide.with(context).load(item.getProfilePic()).into(binding.userDp);
-            } else {
-                Glide.with(context).load(AppConstance.IMG_URL + item.getProfilePic()).into(binding.userDp);
-            }
-            binding.userComment.setText(item.getComment().trim());
-            binding.username.setText(item.getName());
-            binding.commentLikes.setText(item.getCommentLikesCount());
-            if(item.getLiked().equalsIgnoreCase("0")){
-               binding.likeImg.setImageResource(R.drawable.ic_like);
-            }else{
-                binding.likeImg.setImageResource(R.drawable.ic_liked);
-            }
-            binding.viewReplies.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    viewModel.getNavigator().callReplyFragment(item,position);
+            try {
+                binding.date.setText(item.getDate());
+                Uri uri = Uri.parse(item.getProfilePic());
+                String protocol = uri.getScheme();
+                String server = uri.getAuthority();
+                if (protocol != null && server != null) {
+                    Glide.with(context).load(item.getProfilePic()).into(binding.userDp);
+                } else {
+                    Glide.with(context).load(AppConstance.IMG_URL + item.getProfilePic()).into(binding.userDp);
                 }
-            });
-            binding.reply.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    viewModel.getNavigator().callReplyFragment(item,position);
+                binding.userComment.setText(item.getComment().trim());
+                binding.username.setText(item.getName());
+                binding.commentLikes.setText(item.getCommentLikesCount());
+                if (item.getLiked().equalsIgnoreCase("0")) {
+                    binding.likeImg.setImageResource(R.drawable.ic_like);
+                } else {
+                    binding.likeImg.setImageResource(R.drawable.ic_liked);
                 }
-            });
-            viewModel.getAllCommentsReply( item.getCommentId(), new GetReplyResponse() {
-                @Override
-                public void addReplyResponse(List<com.skteam.blogapp.restmodels.replyAllResponse.ResItem> resItems) {
-                    if (resItems != null) {
-                        binding.replyLayout.setVisibility(View.VISIBLE);
-                        Uri uri = Uri.parse(resItems.get(0).getProfilePic());
-                        String protocol = uri.getScheme();
-                        String server = uri.getAuthority();
-                        if (protocol != null && server != null) {
-                            Glide.with(context).load(resItems.get(0).getProfilePic()).into(binding.userDpReply);
-                        } else {
-                            Glide.with(context).load(AppConstance.IMG_URL + resItems.get(0).getProfilePic()).into(binding.userDpReply);
-                        }
-
-                        binding.userCommentReply.setText(resItems.get(0).getComment());
-                        if (resItems.get(0).getUserName() != null && !resItems.get(0).getUserName().isEmpty()) {
-                            binding.usernameReply.setText(resItems.get(0).getUserName());
-                        }
-                    }else{
-                        binding.replyLayout.setVisibility(View.GONE);
+                binding.viewReplies.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewModel.getNavigator().callReplyFragment(item, position);
                     }
-                }
-            });
-
-
-                    binding.likeImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (item.getLiked().equalsIgnoreCase("0")) {
-                                viewModel.setCommentLike(item.getUserId(), item.getCommentId(), "1");
-                                int count = Integer.parseInt(item.getCommentLikesCount());
-                                item.setCommentLikesCount(String.valueOf(count + 1));
-                                item.setLiked("1");
-                                notifyItemChanged(position);
+                });
+                binding.reply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewModel.getNavigator().callReplyFragment(item, position);
+                    }
+                });
+                viewModel.getAllCommentsReply(item.getCommentId(), new GetReplyResponse() {
+                    @Override
+                    public void addReplyResponse(List<com.skteam.blogapp.restmodels.replyAllResponse.ResItem> resItems) {
+                        if (resItems != null) {
+                            binding.replyLayout.setVisibility(View.VISIBLE);
+                            Uri uri = Uri.parse(resItems.get(0).getProfilePic());
+                            String protocol = uri.getScheme();
+                            String server = uri.getAuthority();
+                            if (protocol != null && server != null) {
+                                Glide.with(context).load(resItems.get(0).getProfilePic()).into(binding.userDpReply);
                             } else {
-                                viewModel.setCommentLike(item.getUserId(), item.getCommentId(), "0");
-                                int count = Integer.parseInt(item.getCommentLikesCount());
-                                if (count != 0) {
-                                    item.setCommentLikesCount(String.valueOf(count - 1));
-                                }
-
-                                item.setLiked("0");
-                                notifyItemChanged(position);
+                                Glide.with(context).load(AppConstance.IMG_URL + resItems.get(0).getProfilePic()).into(binding.userDpReply);
                             }
 
+                            binding.userCommentReply.setText(resItems.get(0).getComment());
+                            if (resItems.get(0).getUserName() != null && !resItems.get(0).getUserName().isEmpty()) {
+                                binding.usernameReply.setText(resItems.get(0).getUserName());
+                            }
+                        } else {
+                            binding.replyLayout.setVisibility(View.GONE);
                         }
-                    });
+                    }
+                });
 
 
+                binding.likeImg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (item.getLiked().equalsIgnoreCase("0")) {
+                            viewModel.setCommentLike(item.getUserId(), item.getCommentId(), "1");
+                            int count = Integer.parseInt(item.getCommentLikesCount());
+                            item.setCommentLikesCount(String.valueOf(count + 1));
+                            item.setLiked("1");
+                            notifyItemChanged(position);
+                        } else {
+                            viewModel.setCommentLike(item.getUserId(), item.getCommentId(), "0");
+                            int count = Integer.parseInt(item.getCommentLikesCount());
+                            if (count != 0) {
+                                item.setCommentLikesCount(String.valueOf(count - 1));
+                            }
+
+                            item.setLiked("0");
+                            notifyItemChanged(position);
+                        }
+
+                    }
+                });
+
+            }catch (Exception e){
+
+            }
         }
 
     }

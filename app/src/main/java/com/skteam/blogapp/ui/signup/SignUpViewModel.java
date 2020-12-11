@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,9 +35,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.skteam.blogapp.BuildConfig;
 import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseViewModel;
 import com.skteam.blogapp.prefrences.SharedPre;
+import com.skteam.blogapp.restmodels.signUp.SignUpResponse;
 import com.skteam.blogapp.setting.AppConstance;
 
 import org.json.JSONObject;
@@ -67,7 +70,6 @@ public class SignUpViewModel extends BaseViewModel<SignUpNav> {
 
     }
     public void SignupNow(String name,String Email,String password) {
-        getNavigator().setLoading(true);
         getNavigator().setLoading(true);
         getSharedPre().setIsRegister(true);
         getSharedPre().setUserEmail(Email);
@@ -127,7 +129,7 @@ public class SignUpViewModel extends BaseViewModel<SignUpNav> {
                             FirebaseUser user = mAuth.getCurrentUser();
                             getSharedPre().setUserId(user.getUid());
                             user.sendEmailVerification();
-                            //SignuViaClient(getSharedPre().getName(),user.getEmail() , "",user.getUid() , AppConstance.LOGIN_TYPE_EMAIL,BuildConfig.VERSION_NAME,AppConstance.LOGIN_TYPE_EMAIL);
+                            SignuViaClient(getSharedPre().getName(),user.getEmail() , "",user.getUid() , AppConstance.LOGIN_TYPE_EMAIL,BuildConfig.VERSION_NAME,AppConstance.LOGIN_TYPE_EMAIL);
 
                         } else {
                             getNavigator().setLoading(false);
@@ -165,7 +167,8 @@ public class SignUpViewModel extends BaseViewModel<SignUpNav> {
                                 getNavigator().setLoading(false);
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 getSharedPre().setUserId(user.getUid());
-                                //SignuViaClient(getSharedPre().getName(),user.getEmail(), Profile,getSharedPre().getUserId(),finalTypeFinal, BuildConfig.VERSION_NAME, finalTypeFinal);
+                                getSharedPre().setIsLoggedIn(true);
+                                SignuViaClient(getSharedPre().getName(),user.getEmail(), Profile,getSharedPre().getUserId(),finalTypeFinal, BuildConfig.VERSION_NAME, finalTypeFinal);
                             } else {
                                 // If sign in fails, display a message to the user.
                                 getNavigator().setMessage("Authentication Failed");
@@ -183,5 +186,48 @@ public class SignUpViewModel extends BaseViewModel<SignUpNav> {
     public void signOut() {
         mAuth.signOut();
     }
+    private void SignuViaClient(String name, String email, String profile, String uid, String finalTypeFinal, String versionName,String finalTypeFinal2) {
+        getNavigator().setLoading(true);
+        AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.SIGN_UP)
+                .addBodyParameter("user_id", uid)
+                .addBodyParameter("name", name)
+                .addBodyParameter("email", email)
+                .addBodyParameter("app_version", versionName)
+                .addBodyParameter("verified", "1")
+                .addBodyParameter("signup_type", finalTypeFinal)
+                .addBodyParameter("profile_pic", profile)
+                .addBodyParameter("phone", "0")
+                .addBodyParameter("gender", "")
+                .addBodyParameter("date_of_birth", "")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObject(SignUpResponse.class, new ParsedRequestListener<SignUpResponse>() {
+                    @Override
+                    public void onResponse(SignUpResponse response) {
+                        getNavigator().setLoading(false);
+                        if (response != null) {
+                            if (response.getCode().equals("200")) {
+                                getSharedPre().setName(response.getRes().get(0).getName());
+                                getSharedPre().setUserEmail(response.getRes().get(0).getEmail());
+                                if(finalTypeFinal==AppConstance.LOGIN_TYPE_EMAIL){
+                                    getNavigator().StartLogin();
+                                }else{
+                                    getNavigator().startHome();
+                                }
+
+                            } else {
+                                getNavigator().setMessage("Server Not Responding");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        getNavigator().setLoading(false);
+                        getNavigator().setMessage("Server Not Responding");
+                    }
+                });
+    }
+
 
 }

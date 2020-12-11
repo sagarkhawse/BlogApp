@@ -73,29 +73,7 @@ public class CommentViewModel extends BaseViewModel<CommentNav> {
                     }
                 });
     }
-    public void setReplyLike(String userId, String replyId, String action) {
-        AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.LIKE_COMMENT)
-                .addBodyParameter("user_id", userId)
-                .addBodyParameter("repy_id", replyId)
-                .addBodyParameter("action", action)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsObject(LikeResponse.class, new ParsedRequestListener<LikeResponse>() {
-                    @Override
-                    public void onResponse(LikeResponse response) {
-                        if (response != null && response.getCode().equalsIgnoreCase("200")) {
 
-                        }else{
-
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
-    }
 
     public void CommentNow(String blogIdMain, String userId, String comment) {
         String date= String.valueOf(System.currentTimeMillis());

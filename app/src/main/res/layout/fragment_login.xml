@@ -9,17 +9,15 @@
         android:orientation="vertical"
         tools:context=".ui.login.LoginFragment">
 
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
+
 
 
         <LinearLayout
             android:id="@+id/bottom_lyt"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/_10sdp"
             android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/_10sdp"
             android:background="@drawable/bg_curve_top_white"
             android:orientation="vertical"
             android:paddingTop="@dimen/_30sdp"
@@ -77,9 +75,8 @@
                 android:layout_marginBottom="@dimen/_20sdp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/forget_password"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorTheme3"
                 android:textSize="@dimen/_12ssp" />
-
 
             <Button
                 android:id="@+id/loginBtn"
@@ -90,7 +87,16 @@
                 android:layout_marginEnd="@dimen/_15sdp"
                 android:text="@string/log_in" />
 
+            <include layout="@layout/or_layout" />
 
+            <Button
+                android:id="@+id/SignUpBtn"
+                style="@style/btnOutline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:text="@string/sign_up" />
 
 
             <include
