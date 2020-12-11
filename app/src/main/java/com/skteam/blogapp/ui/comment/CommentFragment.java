@@ -1,5 +1,6 @@
 package com.skteam.blogapp.ui.comment;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,10 +22,12 @@ import com.skteam.blogapp.R;
 import com.skteam.blogapp.baseclasses.BaseFragment;
 import com.skteam.blogapp.databinding.FragmentCommentBinding;
 import com.skteam.blogapp.restmodels.commentresponse.ResItem;
+import com.skteam.blogapp.setting.AppConstance;
 import com.skteam.blogapp.ui.comment.pagination.PaginationScrollListener;
 import com.skteam.blogapp.ui.comment.pagination.adapter.CommentAdapter;
 import com.skteam.blogapp.ui.home.HomeViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -40,6 +43,7 @@ public class CommentFragment extends BaseFragment<FragmentCommentBinding, Commen
     private static CommentFragment instance;
     private PagedList<ResItem> getAllComments;
     private CommentAdapter adapter;
+    private List<ResItem> commentList=new ArrayList<>();
     int page=1;
     private Disposable disposable;
 
@@ -82,9 +86,19 @@ public class CommentFragment extends BaseFragment<FragmentCommentBinding, Commen
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.toolbar.title.setText("Comments");
-        adapter = new CommentAdapter(getContext(), viewModel);
+        adapter = new CommentAdapter(getContext(),commentList, viewModel);
         binding.recyclerView.setAdapter(adapter);
         loadFirstPage();
+        Uri uri = Uri.parse(getSharedPre().getClientProfile());
+        String protocol = uri.getScheme();
+        String server = uri.getAuthority();
+        if (protocol != null && server != null) {
+            Glide.with(getContext()).load(getSharedPre().getClientProfile()).into(binding.userDp);
+        } else {
+            Glide.with(getContext()).load(AppConstance.IMG_URL + getSharedPre().getClientProfile()).into(binding.userDp);
+        }
+
+        binding.inputComment.setHint(getContext().getResources().getString(R.string.comment_as) + " " + getSharedPre().getName());
         binding.postClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,8 +134,6 @@ public class CommentFragment extends BaseFragment<FragmentCommentBinding, Commen
             }
         });
 
-        Glide.with(getContext()).load(getSharedPre().getClientProfile()).into(binding.userDp);
-        binding.inputComment.setHint(getContext().getResources().getString(R.string.comment_as) + " " + getSharedPre().getName());
 
 
     }
@@ -130,6 +142,7 @@ public class CommentFragment extends BaseFragment<FragmentCommentBinding, Commen
     }
     private void loadFirstPage() {
         // fetching dummy data
+        page=1;
         viewModel.getAllComments(blogIdMain, page);
     }
 
@@ -159,6 +172,7 @@ public class CommentFragment extends BaseFragment<FragmentCommentBinding, Commen
 
     @Override
     public void setCommentResponse(List<ResItem> res) {
+        commentList=res;
         adapter.updaeLIst(res);
     }
 
@@ -166,5 +180,15 @@ public class CommentFragment extends BaseFragment<FragmentCommentBinding, Commen
     public void setCommentResponseFirstTime(List<ResItem> res) {
         page++;
         adapter.LoadFirstTime(res);
+    }
+
+    @Override
+    public void callReplyFragment(ResItem item,int postion) {
+        getBaseActivity().startFragment(ReplyFragment.getInstance(item),true,ReplyFragment.getInstance(item).toString());
+    }
+
+    @Override
+    public void replyDone() {
+
     }
 }

@@ -28,5 +28,6 @@ public class AppConstance {
     public static final String COMMENT_NOW ="comment";
     public static final String REPLY_TO_COMMENT ="reply_to_comment";
     public static final String VIEW_REPLY ="show_all_comment_replies";
+    public static final String UPLOAD_DP ="update_user_dp";
 
 }

@@ -12,4 +12,8 @@ public interface CommentNav {
     void setCommentResponse(List<ResItem> res);
 
     void setCommentResponseFirstTime(List<ResItem> res);
+
+    void callReplyFragment(ResItem item,int postion);
+
+    void replyDone();
 }

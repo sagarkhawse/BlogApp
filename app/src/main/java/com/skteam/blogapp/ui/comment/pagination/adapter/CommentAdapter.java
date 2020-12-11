@@ -1,6 +1,7 @@
 package com.skteam.blogapp.ui.comment.pagination.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.skteam.blogapp.R;
 import com.skteam.blogapp.databinding.BlogItemBinding;
 import com.skteam.blogapp.databinding.ItemCommentBinding;
 import com.skteam.blogapp.restmodels.commentresponse.ResItem;
+import com.skteam.blogapp.setting.AppConstance;
 import com.skteam.blogapp.setting.CommonUtils;
 import com.skteam.blogapp.ui.comment.CommentViewModel;
 import com.skteam.blogapp.ui.home.HomeActivity;
@@ -33,9 +35,10 @@ public class CommentAdapter extends RecyclerView.Adapter< CommentAdapter.Comment
     private CommentViewModel viewModel;
     private int postion;
 
-    public CommentAdapter(Context context, CommentViewModel commentViewModel) {
+    public CommentAdapter(Context context, List<ResItem> commentList,CommentViewModel commentViewModel) {
         this.context = context;
         this.viewModel=commentViewModel;
+        this.commentList=commentList;
     }
 
     @NonNull
@@ -79,7 +82,14 @@ public class CommentAdapter extends RecyclerView.Adapter< CommentAdapter.Comment
 
         public void OnBindView(final ResItem item, int position) {
             binding.date.setText(item.getDate());
-            Glide.with(context).load(item.getProfilePic()).into(binding.userDp);
+            Uri uri = Uri.parse(item.getProfilePic());
+            String protocol = uri.getScheme();
+            String server = uri.getAuthority();
+            if (protocol != null && server != null) {
+                Glide.with(context).load(item.getProfilePic()).into(binding.userDp);
+            } else {
+                Glide.with(context).load(AppConstance.IMG_URL + item.getProfilePic()).into(binding.userDp);
+            }
             binding.userComment.setText(item.getComment().trim());
             binding.username.setText(item.getName());
             binding.commentLikes.setText(item.getCommentLikesCount());
@@ -88,12 +98,32 @@ public class CommentAdapter extends RecyclerView.Adapter< CommentAdapter.Comment
             }else{
                 binding.likeImg.setImageResource(R.drawable.ic_liked);
             }
-            viewModel.getAllCommentsReply(1, item.getCommentId(), new GetReplyResponse() {
+            binding.viewReplies.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewModel.getNavigator().callReplyFragment(item,position);
+                }
+            });
+            binding.reply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewModel.getNavigator().callReplyFragment(item,position);
+                }
+            });
+            viewModel.getAllCommentsReply( item.getCommentId(), new GetReplyResponse() {
                 @Override
                 public void addReplyResponse(List<com.skteam.blogapp.restmodels.replyAllResponse.ResItem> resItems) {
                     if (resItems != null) {
                         binding.replyLayout.setVisibility(View.VISIBLE);
-                        Glide.with(context).load(resItems.get(0).getProfilePic()).into(binding.userDpReply);
+                        Uri uri = Uri.parse(resItems.get(0).getProfilePic());
+                        String protocol = uri.getScheme();
+                        String server = uri.getAuthority();
+                        if (protocol != null && server != null) {
+                            Glide.with(context).load(resItems.get(0).getProfilePic()).into(binding.userDpReply);
+                        } else {
+                            Glide.with(context).load(AppConstance.IMG_URL + resItems.get(0).getProfilePic()).into(binding.userDpReply);
+                        }
+
                         binding.userCommentReply.setText(resItems.get(0).getComment());
                         if (resItems.get(0).getUserName() != null && !resItems.get(0).getUserName().isEmpty()) {
                             binding.usernameReply.setText(resItems.get(0).getUserName());
@@ -130,6 +160,7 @@ public class CommentAdapter extends RecyclerView.Adapter< CommentAdapter.Comment
 
 
         }
+
     }
 
 }

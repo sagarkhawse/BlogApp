@@ -49,23 +49,34 @@ public class CommentViewModel extends BaseViewModel<CommentNav> {
         return getCommentBlogList;
     }
 
-  /*  public void GetAllComment(String blogIdMain,CommentNav commentNav) {
-        commentDataFatory= new CommentDataFatory(commentNav,getSharedPre().getUserId(),blogIdMain);
-        //GetLiveSource
-        sourceLiveData=commentDataFatory.GetBlogsCommentLive();
-        //set PageList Config
-        PagedList.Config config= (new PagedList.Config.Builder()).setEnablePlaceholders(false).setInitialLoadSizeHint(10)
-                .setPageSize(5).setPrefetchDistance(4).build();
-        //ThreadPool
-        executor= Executors.newFixedThreadPool(5);
-        //Sent LiveBarList
-        getCommentBlogList=(new LivePagedListBuilder<Long, ResItem>(commentDataFatory,config)).setFetchExecutor(executor).build();
-    }*/
 
     public void setCommentLike(String userId, String commentId, String action) {
         AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.LIKE_COMMENT)
                 .addBodyParameter("user_id", userId)
                 .addBodyParameter("comment_id", commentId)
+                .addBodyParameter("action", action)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObject(LikeResponse.class, new ParsedRequestListener<LikeResponse>() {
+                    @Override
+                    public void onResponse(LikeResponse response) {
+                        if (response != null && response.getCode().equalsIgnoreCase("200")) {
+
+                        }else{
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+    }
+    public void setReplyLike(String userId, String replyId, String action) {
+        AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.LIKE_COMMENT)
+                .addBodyParameter("user_id", userId)
+                .addBodyParameter("repy_id", replyId)
                 .addBodyParameter("action", action)
                 .setPriority(Priority.HIGH)
                 .build()
@@ -118,6 +129,39 @@ public class CommentViewModel extends BaseViewModel<CommentNav> {
                     }
                 });
     }
+    public void ReplyNow(String commentId, String userId, String comment) {
+        String date= String.valueOf(System.currentTimeMillis());
+        AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.LIKE_COMMENT)
+                .addBodyParameter("user_id", userId)
+                .addBodyParameter("comment_id_replying_to", commentId)
+                .addBodyParameter("comment", comment)
+                .addBodyParameter("date", date)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if(response.has("code")){
+                            try {
+                                if(response.getString("code").equalsIgnoreCase("200")){
+                                    getNavigator().replyDone();
+                                    getNavigator().getMessage("Comment Added...");
+                                }else{
+                                    getNavigator().getMessage("Server Not Responding..");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+    }
 
     public void getAllComments(String blogIdMain,int page){
         AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.VIEW_ALL_COMMENT)
@@ -140,7 +184,7 @@ public class CommentViewModel extends BaseViewModel<CommentNav> {
 
                             }
                         }else{
-                            getNavigator().getMessage("Server Not Resonding..");
+
                         }
                     }
 
@@ -152,11 +196,11 @@ public class CommentViewModel extends BaseViewModel<CommentNav> {
                 });
     }
 
-    public MutableLiveData<List<com.skteam.blogapp.restmodels.replyAllResponse.ResItem>> getAllCommentsReply(int page, String commentId, GetReplyResponse replyResponse){
+    public void getAllCommentsReply( String commentId, GetReplyResponse replyResponse){
         AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.VIEW_REPLY)
                 .addBodyParameter("user_id",getSharedPre().getUserId())
                 .addBodyParameter("comment_id", commentId)
-                .addBodyParameter("page", String.valueOf(page))
+                .addBodyParameter("page", "1")
                 .setPriority(Priority.HIGH)
                 .build()
                 .getAsObject(ReplyAllResponse.class, new ParsedRequestListener<ReplyAllResponse>() {
@@ -180,7 +224,6 @@ public class CommentViewModel extends BaseViewModel<CommentNav> {
                         getNavigator().getMessage("Server not Responding");
                     }
                 });
-      return GetAllReply;
     }
 
 }

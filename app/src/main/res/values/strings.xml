@@ -133,5 +133,6 @@
     <string name="likes">Likes</string>
     <string name="delete">Delete</string>
     <string name="leave_a_reply">Leave a reply</string>
+    <string name="replayAs">"reply as "</string>
 
 </resources>

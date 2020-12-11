@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -171,6 +172,10 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
             }
 
         }
+    }
+
+    public void startFragment(Fragment fragment,String name){
+        startFragment(fragment,true,name);
     }
 
 }
