@@ -90,8 +90,8 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
         binding.youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                String videoId = "S0Q4gqBUs7c";
-                //youTubePlayer.loadVideo(videoId, 0);
+                String videoId = "JR7-QmtmiRs";
+//                youTubePlayer.loadVideo(videoId, 0);
             }
         });
        setClickListeners();
