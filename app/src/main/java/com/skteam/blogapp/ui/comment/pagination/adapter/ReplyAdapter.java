@@ -55,7 +55,12 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
 
     @Override
     public int getItemCount() {
-        return replyList.size();
+        if(replyList!=null && replyList.size()>0){
+            return replyList.size();
+        }else{
+            return 0;
+        }
+
     }
 
     public class ReplyViewHolder extends RecyclerView.ViewHolder {
@@ -68,48 +73,49 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
 
 
         public void OnBindView(final ResItem item, int position) {
+            if (item != null) {
+                Uri uri = Uri.parse(item.getProfilePic());
+                String protocol = uri.getScheme();
+                String server = uri.getAuthority();
+                if (protocol != null && server != null) {
+                    Glide.with(context).load(item.getProfilePic()).into(binding.userDpReply);
+                } else {
+                    Glide.with(context).load(AppConstance.IMG_URL + item.getProfilePic()).into(binding.userDpReply);
+                }
+                binding.userCommentReply.setText(item.getComment().trim());
+                binding.usernameReply.setText(item.getUserName());
+                binding.likeCount.setText(item.getCommentLikesCount());
+                if (item.getLiked().equalsIgnoreCase("0")) {
+                    binding.likeImg.setImageResource(R.drawable.ic_like);
+                } else {
+                    binding.likeImg.setImageResource(R.drawable.ic_liked);
+                }
+                binding.dateReply.setText(CommonUtils.dateFormat(item.getDate()));
+                binding.likeImg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (item.getLiked().equalsIgnoreCase("0")) {
+                            // viewModel.setReplyLike(viewModel.getSharedPre().getUserId(), item.getCommentId(), "1");
+                            int count = Integer.parseInt(item.getCommentLikesCount());
+                            item.setCommentLikesCount(String.valueOf(count + 1));
+                            item.setLiked("1");
+                            notifyItemChanged(position);
+                        } else {
+                            // viewModel.setReplyLike(viewModel.getSharedPre().getUserId(), item.getCommentId(), "0");
+                            int count = Integer.parseInt(item.getCommentLikesCount());
+                            if (count != 0) {
+                                item.setCommentLikesCount(String.valueOf(count - 1));
+                            }
 
-            Uri uri = Uri.parse(item.getProfilePic());
-            String protocol = uri.getScheme();
-            String server = uri.getAuthority();
-            if (protocol != null && server != null) {
-                Glide.with(context).load(item.getProfilePic()).into(binding.userDpReply);
-            } else {
-                Glide.with(context).load(AppConstance.IMG_URL + item.getProfilePic()).into(binding.userDpReply);
-            }
-            binding.userCommentReply.setText(item.getComment().trim());
-            binding.usernameReply.setText(item.getUserName());
-            binding.likeCount.setText(item.getCommentLikesCount());
-            if (item.getLiked().equalsIgnoreCase("0")) {
-                binding.likeImg.setImageResource(R.drawable.ic_like);
-            } else {
-                binding.likeImg.setImageResource(R.drawable.ic_liked);
-            }
-            binding.dateReply.setText(CommonUtils.dateFormat(item.getDate()));
-            binding.likeImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (item.getLiked().equalsIgnoreCase("0")) {
-                        // viewModel.setReplyLike(viewModel.getSharedPre().getUserId(), item.getCommentId(), "1");
-                        int count = Integer.parseInt(item.getCommentLikesCount());
-                        item.setCommentLikesCount(String.valueOf(count + 1));
-                        item.setLiked("1");
-                        notifyItemChanged(position);
-                    } else {
-                        // viewModel.setReplyLike(viewModel.getSharedPre().getUserId(), item.getCommentId(), "0");
-                        int count = Integer.parseInt(item.getCommentLikesCount());
-                        if (count != 0) {
-                            item.setCommentLikesCount(String.valueOf(count - 1));
+                            item.setLiked("0");
+                            notifyItemChanged(position);
                         }
 
-                        item.setLiked("0");
-                        notifyItemChanged(position);
                     }
-
-                }
-            });
+                });
 
 
+            }
         }
     }
 

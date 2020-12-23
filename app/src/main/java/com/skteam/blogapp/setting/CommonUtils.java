@@ -267,32 +267,24 @@ public class CommonUtils {
 
     }
     public static String CurrentTimeAsFormat2(long curentTimeStamp,String format)  {
-
         SimpleDateFormat formatter = new SimpleDateFormat(format);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(curentTimeStamp);
         return formatter.format(calendar.getTime());
-
-
     }
 
 
     public static String dateFormat(String date) {
+if(date!=null && !date.isEmpty()) {
+    Calendar current_cal = Calendar.getInstance();
 
-        Calendar current_cal = Calendar.getInstance();
+    Calendar date_cal = Calendar.getInstance();
 
-        Calendar date_cal = Calendar.getInstance();
-
-        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        Date d = null;
-        try {
-            d = f.parse(date);
-            date_cal.setTime(d);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
+    SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+    Date d = null;
+    try {
+        d = f.parse(date);
+        date_cal.setTime(d);
         long difference = (current_cal.getTimeInMillis() - date_cal.getTimeInMillis()) / 1000;
 
         if (difference < 86400) {
@@ -306,8 +298,12 @@ public class CommonUtils {
             return "yesterday";
         } else
             return (difference / 86400) + " day ago";
+    } catch (ParseException e) {
+        e.printStackTrace();
+    }
 
-
+}
+return "";
     }
 
 }

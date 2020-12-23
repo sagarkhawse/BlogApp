@@ -84,13 +84,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
         blogAdapter = new BlogAdapter(getContext());
         binding.blogsRecycler.setAdapter(blogAdapter);
 
-        viewModel.LoadPaging(this, "1");
-
-        viewModel.getGeBarDtaList().observe(getBaseActivity(), resItems -> {
-                getBlogList = resItems;
-                blogAdapter.submitList(getBlogList);
-
-        });
         binding.catogry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
