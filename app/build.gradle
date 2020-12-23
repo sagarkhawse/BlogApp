@@ -109,5 +109,7 @@ dependencies {
     //paging
     implementation 'android.arch.paging:runtime:1.0.1'
     implementation 'androidx.paging:paging-runtime:2.1.0'
+
+    //Youtube Player
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 }

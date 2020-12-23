@@ -2,6 +2,7 @@ package com.skteam.blogapp.ui.viewblog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -29,9 +30,9 @@ public class ViewBlogViewModel extends BaseViewModel<ViewBlogNav> {
                     @Override
                     public void onResponse(LikeResponse response) {
                         if (response != null && response.getCode().equalsIgnoreCase("200")) {
-
+                            Log.d("LikeTheBlog", "onResponse: liked ");
                         }else{
-                            getNavigator().getMessage("Server not Responding ");
+                            getNavigator().getMessage( response.getError_msg());
                         }
                     }
 

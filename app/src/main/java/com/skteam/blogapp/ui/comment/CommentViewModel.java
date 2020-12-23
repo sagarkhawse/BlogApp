@@ -77,7 +77,8 @@ public class CommentViewModel extends BaseViewModel<CommentNav> {
 
     public void CommentNow(String blogIdMain, String userId, String comment) {
         String date= String.valueOf(System.currentTimeMillis());
-        AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.LIKE_COMMENT)
+
+        AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.COMMENT_NOW)
                 .addBodyParameter("user_id", userId)
                 .addBodyParameter("blog_id", blogIdMain)
                 .addBodyParameter("comment", comment)
@@ -92,7 +93,7 @@ public class CommentViewModel extends BaseViewModel<CommentNav> {
                                 if(response.getString("code").equalsIgnoreCase("200")){
                                     getNavigator().getMessage("Comment Added...");
                                 }else{
-                                    getNavigator().getMessage("Server Not Responding..");
+                                    getNavigator().getMessage("Error:- "+response.getString("error_msg"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -103,7 +104,7 @@ public class CommentViewModel extends BaseViewModel<CommentNav> {
 
                     @Override
                     public void onError(ANError anError) {
-
+                        getNavigator().getMessage(anError.getMessage());
                     }
                 });
     }

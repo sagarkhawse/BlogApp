@@ -86,6 +86,7 @@ public class CommentFragment extends BaseFragment<FragmentCommentBinding, Commen
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.toolbar.title.setText("Comments");
+        binding.toolbar.back.setImageDrawable(getResources().getDrawable(R.drawable.ic_left_arrow));
         adapter = new CommentAdapter(getContext(),commentList, viewModel);
         binding.recyclerView.setAdapter(adapter);
         loadFirstPage();
@@ -102,7 +103,6 @@ public class CommentFragment extends BaseFragment<FragmentCommentBinding, Commen
         binding.postClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getVib().vibrate(100);
                 if (!binding.inputComment.getText().toString().trim().isEmpty()) {
                     viewModel.CommentNow(blogIdMain, getSharedPre().getUserId(), binding.inputComment.getText().toString().trim());
                     binding.inputComment.setText("");

@@ -11,8 +11,15 @@ public class LikeResponse{
 	@SerializedName("code")
 	private String code;
 
+	@SerializedName("error_msg")
+	private String error_msg;
+
 	public List<MsgItem> getMsg(){
 		return msg;
+	}
+
+	public String getError_msg() {
+		return error_msg;
 	}
 
 	public String getCode(){

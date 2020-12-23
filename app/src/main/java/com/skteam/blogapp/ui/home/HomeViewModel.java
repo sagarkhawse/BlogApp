@@ -45,6 +45,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class HomeViewModel extends BaseViewModel<HomeNav> {
+    private static final String TAG = "HomeViewModelTest";
     private LiveData<PagedList<ResItem>> getBlogList;
     private BlogDataSource blogDataSource;
     private BlogDataFatory blogDataFatory;
@@ -182,7 +183,7 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
                                  LoginClient(getSharedPre().getName(),user.getEmail(),Profile,user.getUid(),finalTypeFinal, BuildConfig.VERSION_NAME);
                             } else {
                                 // If sign in fails, display a message to the user.
-
+                                Log.d(TAG, "onComplete: Error "+task.getResult() + task.getException());
                                 getNavigator().getMessage("Authentication Failed");
                             }
 

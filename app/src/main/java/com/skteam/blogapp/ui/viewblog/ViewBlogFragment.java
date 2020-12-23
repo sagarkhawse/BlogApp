@@ -100,11 +100,9 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
 
     private void setClickListeners() {
         binding.ivBack.setOnClickListener(v -> {
-            getVib().vibrate(100);
             ((HomeActivity)getContext()).onBackPressed();
         });
         binding.ivLike.setOnClickListener(v -> {
-            getVib().vibrate(100);
             if(getSharedPre().isLoggedIn()){
                 if(getVlogMain.getLikeAction.equalsIgnoreCase("0")){
                     //like
@@ -162,7 +160,6 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
         binding.ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getVib().vibrate(100);
                 if(getSharedPre().isLoggedIn()){
                     getBaseActivity().startFragment(CommentFragment.getInstance(getVlogMain.getId()),true,CommentFragment.getInstance(getVlogMain.getId()).toString(),true);
                 }else{
@@ -173,7 +170,6 @@ public class ViewBlogFragment extends BaseFragment<ViewBlogFragmentBinding, View
         binding.ivCommentTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getVib().vibrate(100);
                 if(getSharedPre().isLoggedIn()){
                     getBaseActivity().startFragment(CommentFragment.getInstance(getVlogMain.getId()),true,CommentFragment.getInstance(getVlogMain.getId()).toString(),true);
                 }else{

@@ -1,5 +1,6 @@
 package com.skteam.blogapp.ui.home.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -61,6 +62,7 @@ public class BlogAdapter extends PagedListAdapter<ResItem, BlogAdapter.BlogViewH
             this.binding = binding;
         }
 
+        @SuppressLint("SetTextI18n")
         public void OnBindView(final ResItem item, int position) {
             binding.tvDate.setText(CommonUtils.dateFormat(item.getCreatedAt()));
             Glide.with(context).load(IMG_URL + item.getImage()).into(binding.ivBlog);

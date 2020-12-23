@@ -1,5 +1,6 @@
 package com.skteam.blogapp.ui.comment;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -78,6 +79,7 @@ public class ReplyFragment extends BaseFragment<ReplyLayoutBinding, CommentViewM
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -85,6 +87,7 @@ public class ReplyFragment extends BaseFragment<ReplyLayoutBinding, CommentViewM
         binding = getViewDataBinding();
         viewModel.setNavigator(this);
         binding.toolbar.title.setText("Reply");
+        binding.toolbar.back.setImageDrawable(getResources().getDrawable(R.drawable.ic_left_arrow));
         adapter = new ReplyAdapter(getContext(), viewModel);
         binding.replayRecyclerView.setAdapter(adapter);
         binding.inputComment.setHint(getContext().getResources().getString(R.string.replayAs) + " " + getSharedPre().getName());

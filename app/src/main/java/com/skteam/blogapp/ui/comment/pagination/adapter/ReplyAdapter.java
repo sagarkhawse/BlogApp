@@ -85,7 +85,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
             } else {
                 binding.likeImg.setImageResource(R.drawable.ic_liked);
             }
-            binding.dateReply.setText(CommonUtils.timeStamp(item.getDate()));
+            binding.dateReply.setText(CommonUtils.dateFormat(item.getDate()));
             binding.likeImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
