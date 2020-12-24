@@ -24,8 +24,6 @@ import com.skteam.blogapp.databinding.BottomSheetBinding;
 import com.skteam.blogapp.databinding.NavHeaderMainBinding;
 import com.skteam.blogapp.databinding.ToolbarBinding;
 import com.skteam.blogapp.restmodels.gteCatogry.ResItem;
-import com.skteam.blogapp.setting.CommonUtils;
-import com.skteam.blogapp.ui.login.LoginFragment;
 import com.skteam.blogapp.ui.profile.ProfileFragment;
 import com.skteam.blogapp.ui.splash.SplashActivity;
 
@@ -114,7 +112,8 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
                     } else {
                         binding.drawer.openDrawer(Gravity.LEFT);
                     }
-                    startFragment(LoginFragment.newInstance(), true, LoginFragment.newInstance().toString());
+                  //  startFragment(LoginFragment.newInstance(), true, LoginFragment.newInstance().toString());
+                    getBottomSheet().bottomLay.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -231,6 +230,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding, HomeViewMode
 
     @Override
     public void StartHomeNow(com.skteam.blogapp.restmodels.signUp.ResItem resItem) {
+        getBottomSheet().bottomLay.setVisibility(View.GONE);
         if (resItem != null) {
             if (getSharedPre().isLoggedIn()) {
                 navigationViewHeaderBinding.btnLogout.setText(getString(R.string.logout));

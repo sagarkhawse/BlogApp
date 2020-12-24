@@ -16,4 +16,6 @@ public interface CommentNav {
     void callReplyFragment(ResItem item,int postion);
 
     void replyDone();
+
+    void getMessageSuccess(String s);
 }

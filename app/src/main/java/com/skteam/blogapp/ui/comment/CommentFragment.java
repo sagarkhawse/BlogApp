@@ -87,6 +87,12 @@ public class CommentFragment extends BaseFragment<FragmentCommentBinding, Commen
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.toolbar.title.setText("Comments");
         binding.toolbar.back.setImageDrawable(getResources().getDrawable(R.drawable.ic_left_arrow));
+        binding.toolbar.back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getBaseActivity().onBackPressed();
+            }
+        });
         adapter = new CommentAdapter(getContext(),commentList, viewModel);
         binding.recyclerView.setAdapter(adapter);
         loadFirstPage();
@@ -190,5 +196,10 @@ public class CommentFragment extends BaseFragment<FragmentCommentBinding, Commen
     @Override
     public void replyDone() {
 
+    }
+
+    @Override
+    public void getMessageSuccess(String s) {
+        loadFirstPage();
     }
 }

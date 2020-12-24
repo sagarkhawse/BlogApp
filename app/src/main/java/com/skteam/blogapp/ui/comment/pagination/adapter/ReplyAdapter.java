@@ -18,6 +18,7 @@ import com.skteam.blogapp.databinding.ReplyLayItemBinding;
 import com.skteam.blogapp.restmodels.replyAllResponse.ResItem;
 import com.skteam.blogapp.setting.AppConstance;
 import com.skteam.blogapp.setting.CommonUtils;
+import com.skteam.blogapp.setting.TimeAgo;
 import com.skteam.blogapp.ui.comment.CommentViewModel;
 
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
                 } else {
                     binding.likeImg.setImageResource(R.drawable.ic_liked);
                 }
-                binding.dateReply.setText(CommonUtils.dateFormat(item.getDate()));
+                binding.dateReply.setText(TimeAgo.getRelativeTime(item.getDate()));
                 binding.likeImg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

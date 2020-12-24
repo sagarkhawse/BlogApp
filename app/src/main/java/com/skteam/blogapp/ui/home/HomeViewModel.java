@@ -35,7 +35,6 @@ import com.skteam.blogapp.baseclasses.BaseViewModel;
 import com.skteam.blogapp.prefrences.SharedPre;
 import com.skteam.blogapp.restmodels.getBlogs.ResItem;
 import com.skteam.blogapp.restmodels.gteCatogry.CatResponse;
-import com.skteam.blogapp.restmodels.likeApi.LikeResponse;
 import com.skteam.blogapp.restmodels.signUp.SignUpResponse;
 import com.skteam.blogapp.setting.AppConstance;
 import com.skteam.blogapp.ui.home.pagination.datasource.BlogDataSource;
@@ -106,7 +105,7 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
                             getNavigator().GetCatogory(response.getRes());
 
                         }else{
-                            getNavigator().getMessage("Server not Responding ");
+
                         }
                     }
 
@@ -158,11 +157,6 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
                 Profile=getSharedPre().getClientProfile();
                 typeFinal=AppConstance.LOGIN_TYPE_GOOGLE;
                 break;
-            }
-
-            default:{
-                credential=null;
-                Profile="";
             }
         }
         if(credential!=null){
@@ -221,8 +215,6 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
                                 getSharedPre().setName(response.getRes().get(0).getName());
                                 getSharedPre().setUserEmail(response.getRes().get(0).getEmail());
                                 getNavigator().StartHomeNow(response.getRes().get(0));
-                            } else {
-                                getNavigator().getMessage("Server Not Responding");
                             }
                         }
                     }
@@ -250,10 +242,8 @@ public class HomeViewModel extends BaseViewModel<HomeNav> {
                                 if (response.getCode().equals("200")) {
                                     getSharedPre().setName(response.getRes().get(0).getName());
                                     getSharedPre().setUserEmail(response.getRes().get(0).getEmail());
-                                    getSharedPre().setClientProfile(response.getRes().get(0).getProfilePic());
+                                  //  getSharedPre().setClientProfile(response.getRes().get(0).getProfilePic());
                                     getNavigator().StartHomeNow(response.getRes().get(0));
-                                } else {
-                                    getNavigator().getMessage("Server Not Responding");
                                 }
                             }
                         }

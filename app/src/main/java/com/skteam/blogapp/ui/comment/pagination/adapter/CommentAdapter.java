@@ -2,11 +2,13 @@ package com.skteam.blogapp.ui.comment.pagination.adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.paging.PagedListAdapter;
@@ -20,6 +22,7 @@ import com.skteam.blogapp.databinding.ItemCommentBinding;
 import com.skteam.blogapp.restmodels.commentresponse.ResItem;
 import com.skteam.blogapp.setting.AppConstance;
 import com.skteam.blogapp.setting.CommonUtils;
+import com.skteam.blogapp.setting.TimeAgo;
 import com.skteam.blogapp.ui.comment.CommentViewModel;
 import com.skteam.blogapp.ui.home.HomeActivity;
 import com.skteam.blogapp.ui.viewblog.ViewBlogFragment;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.skteam.blogapp.setting.AppConstance.IMG_URL;
+import static com.skteam.blogapp.setting.CommonUtils.timeStamp;
 
 public class CommentAdapter extends RecyclerView.Adapter< CommentAdapter.CommenteViewHolder> {
     private Context context;
@@ -82,7 +86,7 @@ public class CommentAdapter extends RecyclerView.Adapter< CommentAdapter.Comment
 
         public void OnBindView(final ResItem item, int position) {
             try {
-                binding.date.setText(item.getDate());
+                binding.date.setText(TimeAgo.getRelativeTime(item.getDate()));
                 Uri uri = Uri.parse(item.getProfilePic());
                 String protocol = uri.getScheme();
                 String server = uri.getAuthority();

@@ -16,7 +16,7 @@ public class SharedPre {
     private static final String EMAIL = "email";
     private static final String NAME = "name";
     private static final String OUR_PROFILE = "myProfileFromApi";
-    private static final String CLIENT_PROFILE = "profileFromFaceBook";
+    private static final String CLIENT_PROFILE = "profileFromGoogle";
     private static final String CLIENT_ID = "clientId";
     private static final String MOBILE_NO = "mobile_no";
     private static final String APP_BACKGROUND = "app_in_background";

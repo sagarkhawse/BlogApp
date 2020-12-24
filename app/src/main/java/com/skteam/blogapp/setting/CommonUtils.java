@@ -131,10 +131,10 @@ public class CommonUtils {
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     public static String timeStamp(String time) {
         try {
-            android.icu.text.SimpleDateFormat format = new android.icu.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date past = format.parse(time);
             Date now = new Date();
             long seconds = TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());

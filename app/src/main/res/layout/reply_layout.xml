@@ -90,7 +90,7 @@
                 android:id="@+id/replay_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".9"
+                android:layout_weight="1"
                 tools:itemCount="5"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="vertical"
@@ -100,8 +100,7 @@
             <LinearLayout
                 android:id="@+id/bottom_bar"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".1"
+                android:layout_height="55dp"
                 android:weightSum="1"
                 android:layout_alignParentBottom="true"
                 app:layout_constraintBottom_toBottomOf="parent">

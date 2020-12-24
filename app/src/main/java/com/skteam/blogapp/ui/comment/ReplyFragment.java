@@ -22,6 +22,7 @@ import com.skteam.blogapp.databinding.ReplyLayoutBinding;
 import com.skteam.blogapp.restmodels.commentresponse.ResItem;
 import com.skteam.blogapp.setting.AppConstance;
 import com.skteam.blogapp.setting.CommonUtils;
+import com.skteam.blogapp.setting.TimeAgo;
 import com.skteam.blogapp.ui.comment.pagination.PaginationScrollListener;
 import com.skteam.blogapp.ui.comment.pagination.adapter.CommentAdapter;
 import com.skteam.blogapp.ui.comment.pagination.adapter.GetReplyResponse;
@@ -80,7 +81,7 @@ public class ReplyFragment extends BaseFragment<ReplyLayoutBinding, CommentViewM
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -88,6 +89,12 @@ public class ReplyFragment extends BaseFragment<ReplyLayoutBinding, CommentViewM
         viewModel.setNavigator(this);
         binding.toolbar.title.setText("Reply");
         binding.toolbar.back.setImageDrawable(getResources().getDrawable(R.drawable.ic_left_arrow));
+        binding.toolbar.back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getBaseActivity().onBackPressed();
+            }
+        });
         adapter = new ReplyAdapter(getContext(), viewModel);
         binding.replayRecyclerView.setAdapter(adapter);
         binding.inputComment.setHint(getContext().getResources().getString(R.string.replayAs) + " " + getSharedPre().getName());
@@ -97,6 +104,7 @@ public class ReplyFragment extends BaseFragment<ReplyLayoutBinding, CommentViewM
                 adapter.updateList(res);
             }
         });
+
         Uri uri = Uri.parse(getComment.getProfilePic());
         String protocol = uri.getScheme();
         String server = uri.getAuthority();
@@ -109,15 +117,15 @@ public class ReplyFragment extends BaseFragment<ReplyLayoutBinding, CommentViewM
         String protocol1 = uri1.getScheme();
         String server1 = uri1.getAuthority();
         if (protocol1 != null && server1 != null) {
-            Glide.with(getContext()).load(getSharedPre().getClientProfile()).into(binding.userDpComment);
+            Glide.with(getContext()).load(getSharedPre().getClientProfile()).into(binding.userDpReply);
         } else {
-            Glide.with(getContext()).load(AppConstance.IMG_URL + getSharedPre().getClientProfile()).into(binding.userDpComment);
+            Glide.with(getContext()).load(AppConstance.IMG_URL + getSharedPre().getClientProfile()).into(binding.userDpReply);
         }
         binding.userComment.setText(getComment.getComment());
         if (getComment.getName() != null && !getComment.getName().isEmpty()) {
             binding.usernameComment.setText(getComment.getName());
         }
-        binding.dateUserComment.setText(CommonUtils.timeStamp(getComment.getDate()));
+        binding.dateUserComment.setText(TimeAgo.getRelativeTime(getComment.getDate()));
         if (getComment.getLiked().equalsIgnoreCase("0")) {
             binding.likeImgUserComment.setImageResource(R.drawable.ic_like);
         } else {
@@ -200,5 +208,10 @@ public class ReplyFragment extends BaseFragment<ReplyLayoutBinding, CommentViewM
                 adapter.updateList(res);
             }
         });
+    }
+
+    @Override
+    public void getMessageSuccess(String s) {
+
     }
 }
