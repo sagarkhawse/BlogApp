@@ -38,6 +38,8 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
     private PagedList<ResItem> getBlogList;
     private CatogryAdapter catogryAdapter;
     private HomeNav homeNav;
+    private boolean isCalled=false;
+    private int postionMain=-1;
     private List<com.skteam.blogapp.restmodels.gteCatogry.ResItem> getCatogry = new ArrayList<>();
 
     public static HomeFragment newInstance() {
@@ -83,15 +85,20 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
         homeNav = this;
         blogAdapter = new BlogAdapter(getContext());
         binding.blogsRecycler.setAdapter(blogAdapter);
-
+        if (getBlogList != null && getBlogList.size() > 0) {
+            blogAdapter.submitList(getBlogList);
+            postionMain=0;
+        }
         binding.catogry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
-                if (getCatogry != null && getCatogry.size() > 0) {
+                if (getCatogry != null && getCatogry.size() > 0 && postionMain!=position ) {
+                    postionMain=position;
                     viewModel.LoadPaging(homeNav, getCatogry.get(position).getCategoryId());
                     viewModel.getGeBarDtaList().observe(getBaseActivity(), resItems -> {
                         getBlogList = resItems;
-                        blogAdapter.submitList(getBlogList);       });
+                        blogAdapter.submitList(getBlogList);
+                    });
                 }
             }
 
@@ -148,7 +155,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentBinding, HomeViewMode
         catogryAdapter = new CatogryAdapter(getContext(), R.layout.checked_spiiner, res);
 
         binding.catogry.setAdapter(catogryAdapter);
-
 
 
     }
