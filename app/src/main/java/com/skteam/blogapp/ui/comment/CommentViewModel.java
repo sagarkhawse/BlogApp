@@ -20,6 +20,7 @@ import com.skteam.blogapp.restmodels.commentresponse.ResItem;
 import com.skteam.blogapp.restmodels.likeApi.LikeResponse;
 import com.skteam.blogapp.restmodels.replyAllResponse.ReplyAllResponse;
 import com.skteam.blogapp.setting.AppConstance;
+import com.skteam.blogapp.setting.CommonUtils;
 import com.skteam.blogapp.ui.comment.pagination.adapter.GetReplyResponse;
 import com.skteam.blogapp.ui.comment.pagination.datafactory.CommentDataFatory;
 import com.skteam.blogapp.ui.comment.pagination.datasource.CommentDataSource;
@@ -76,7 +77,7 @@ public class CommentViewModel extends BaseViewModel<CommentNav> {
 
 
     public void CommentNow(String blogIdMain, String userId, String comment) {
-        String date= String.valueOf(System.currentTimeMillis());
+        String date= CommonUtils.CurrentTimeAsFormat(String.valueOf(System.currentTimeMillis()));
 
         AndroidNetworking.post(AppConstance.API_BASE_URL + AppConstance.COMMENT_NOW)
                 .addBodyParameter("user_id", userId)
